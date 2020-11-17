@@ -13,7 +13,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们有一个全国性质的面向工业的公有云平台，通过专线或4G的链路方式实时向平台传输数据，每天处理1亿条左右的数据量，为现场用户提供实时的在线服务和离线数据分析服务。现在已经上线稳定运行有将近3年的时间。同时也为工业企业提供私有云建设服务。  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们计划使用Flink作为云平台后台的实时计算部分，基本实现数据点的聚合计算、表达式规则计算等业务，进一步实现机器学习或自定义复杂算法的需求。  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们经过将近一年左右时间的研究及开发，已经基本实现了聚合和逻辑等业务，但是感觉Flink比较重，并且应用和运维的水平要求比较高。  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;基于上述情况，我们自主使用[NET 5.0](https://dotnet.microsoft.com/download/dotnet/5.0)开发一套CSharpFlink实时计算组件，支持自定义数据源、计算和存储的基本要求。  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;基于上述情况，我们自主使用[NET 5.0](https://dotnet.microsoft.com/download/dotnet/5.0)开发一套[CSharpFlink](https://github.com/wxzz/CSharpFlink)实时计算组件，支持自定义数据源、计算和存储的基本要求。  
 
 ### 2	应用场景
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;主要面向物联网、工业互联网私有云或公有云平台建设过程中的数据点实时聚合和表达式计算。应用场景包括：
