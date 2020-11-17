@@ -32,7 +32,7 @@
 
 ### 4	框架结构
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;框架结构组件的基本示意，如下图：
-![CSharpFlink框架图示意图](https://github.com/wxzz/CSharpFlink/blob/main/doc/framework.png "CSharpFlink框架图示意图")
+![CSharpFlink框架图示意图](https://blog-static.cnblogs.com/files/lsjwq/framework.gif "CSharpFlink框架图示意图")
 
 ### 5	代码目录说明
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;使用VS2019进行工程开发，工程解决方案文件为：CSharpFlink.sln，代码目录说明如下：
@@ -91,8 +91,8 @@ dotnet CSharpFlink.dll -c c:/master.cfg -t c:/mytask.dll
 
 ### 11	应用事例展示
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;同一台电脑，CPU：4核 I5-7400 3.0GHz,内存：16G，1个主节点，5个工作节点，生成1000个数据点任务，随机数据点时间窗口和计算算子，CPU使用率为：20%-30%，内存使用率：30%-40%，主节点CPU和内存使用情况：3%-5%、100MB-300MB, 工作节点CPU和内存使用情况：0.1%-2%、25MB-60MB。运行效果，如下图：
-![CSharpFlink事例展示](https://github.com/wxzz/CSharpFlink/blob/main/doc/demo.png "CSharpFlink事例展示")
+![CSharpFlink事例展示](https://blog-static.cnblogs.com/files/lsjwq/demo.gif "CSharpFlink事例展示")
 
 iNeuOS工业互联网公众号：
 
-![iNeuOS工业互联网公众号](https://github.com/wxzz/CSharpFlink/blob/main/doc/qrcode.jpg "iNeuOS工业互联网公众号")
+![iNeuOS工业互联网公众号](https://blog-static.cnblogs.com/files/lsjwq/qrcode.gif "iNeuOS工业互联网公众号")
