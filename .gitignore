@@ -28,7 +28,6 @@ x86/
 bld/
 [Bb]in/
 [Oo]bj/
-[Ll]og/
 [Ll]ogs/
 
 # Visual Studio 2015/2017 cache/options directory
@@ -351,5 +350,3 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
-
-!/src/CSharpFlink.Core/Log/*
