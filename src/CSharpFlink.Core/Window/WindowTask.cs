@@ -238,7 +238,17 @@ namespace CSharpFlink.Core.Window
             {
                 if(_delayCache!=null)
                 {
+                    foreach(DataPool dp in _delayCache)
+                    {
+                        dp.Dispose();
+                    }
+
                     _delayCache.Clear();
+                }
+
+                if(_cache!=null)
+                {
+                    _cache.Dispose();
                 }
 
                 if(_timer!=null)
