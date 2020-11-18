@@ -501,6 +501,10 @@ namespace CSharpFlink.Core.Task
                 catch
                 { }
 
+                foreach(KeyValuePair<string,IWindowTask> kv in _winList)
+                {
+                    kv.Value.Dispose();
+                }
                 _winList.Clear();
                 _expList.Clear();
                 _workList.Clear();
