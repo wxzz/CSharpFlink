@@ -19,7 +19,7 @@ namespace CSharpFlink.Core.Common
             WriteAppend(filePath,new string[]{content});
         }
 
-        public static void WriteAppend(string filePath, string[] contents, bool newLine = false)
+        public static void WriteAppend(string filePath, string[] contents, bool newLine = true)
         {
             string content = String.Join(Environment.NewLine, contents);
 
