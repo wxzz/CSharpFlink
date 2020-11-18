@@ -506,6 +506,10 @@ namespace CSharpFlink.Core.Task
                     kv.Value.Dispose();
                 }
                 _winList.Clear();
+                foreach (KeyValuePair<string, IExpressionTask> kv in _expList)
+                {
+                    kv.Value.Dispose();
+                }
                 _expList.Clear();
                 _workList.Clear();
                 _masterCacheList.Clear();
