@@ -1,5 +1,6 @@
 ﻿using CSharpFlink.Core.Calculate;
 using CSharpFlink.Core.Channel;
+using CSharpFlink.Core.Config;
 using CSharpFlink.Core.Protocol;
 using CSharpFlink.Core.Task;
 using System;
@@ -15,11 +16,11 @@ namespace CSharpFlink.Core.Node
         public MasterNode()
         {
             TaskManager = new MasterTaskManager();
-            MasterServer.Connect += ConnectHandler;
-            MasterServer.Disconnect += DisconnectHandler;
-            MasterServer.ReceiveUpTransmisstion += ReceiveUpTransmisstion;
 
-            _masterServer = new MasterServer();
+            _masterServer = new MasterServer(GlobalConfig.Config.MasterIp,GlobalConfig.Config.MasterListenPort);
+            _masterServer.Connect += ConnectHandler;
+            _masterServer.Disconnect += DisconnectHandler;
+            _masterServer.ReceiveUpTransmisstion += ReceiveUpTransmisstion;
         }
 
         public void Start()
@@ -29,9 +30,9 @@ namespace CSharpFlink.Core.Node
 
         public void Stop()
         {
-            MasterServer.Connect -= ConnectHandler;
-            MasterServer.Disconnect -= DisconnectHandler;
-            MasterServer.ReceiveUpTransmisstion -= ReceiveUpTransmisstion;
+            _masterServer.Connect -= ConnectHandler;
+            _masterServer.Disconnect -= DisconnectHandler;
+            _masterServer.ReceiveUpTransmisstion -= ReceiveUpTransmisstion;
 
             _masterServer.Stop();
 

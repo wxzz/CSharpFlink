@@ -1,11 +1,12 @@
 ﻿using CSharpFlink.Core.Calculate;
+using CSharpFlink.Core.Task;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace CSharpFlink.Core.Task
+namespace CSharpFlink.Core.Calculate
 {
-    public interface ITask : IDisposable
+    public interface ICalculateTask : IDisposable
     {
         /// <summary>
         /// 窗口ID

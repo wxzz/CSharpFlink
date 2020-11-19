@@ -130,6 +130,12 @@ namespace CSharpFlink.Core.Task
                                     Parallel.ForEach(parallelTasks, (data) =>
                                     {
                                         IWorker worker = GetPollWorker();
+
+                                        if (worker == null)
+                                        {
+                                            return;
+                                        }
+
                                         lock (((Worker.Worker)worker).SyncLock)
                                         {
                                             if (data != null && data.Length > 0)
@@ -426,7 +432,10 @@ namespace CSharpFlink.Core.Task
                         else
                         {
                             IWorker worker = GetPollWorker();
-                            worker.DoWork(context);
+                            if (worker != null)
+                            {
+                                worker.DoWork(context);
+                            }
                         }
                         #endregion
                     }
@@ -443,7 +452,16 @@ namespace CSharpFlink.Core.Task
         private IWorker GetPollWorker()
         {
             int curIndex = GetNextWorkerIndex();
-            return _workList.ElementAt(curIndex).Value;
+
+            if (curIndex < 0)
+            {
+                Logger.Log.Info(true, "GetPollWorker:为空");
+                return null;
+            }
+            else
+            {
+                return _workList.ElementAt(curIndex).Value;
+            }
         }
 
         private int GetNextWorkerIndex()

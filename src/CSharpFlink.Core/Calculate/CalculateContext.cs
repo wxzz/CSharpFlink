@@ -20,7 +20,16 @@ namespace CSharpFlink.Core.Calculate
             CalculateInpute = inpute;
             CalculateOutput = output;
             CalculateOperator = calculateOperator;
-            Sinks = new List<SinkFunction>(ExecutionEnvironment.Sinks);
+
+            IExecutionEnvironment env = ExecutionEnvironment.GetExecutionEnvironment(null);
+            if (env == null)
+            {
+                Sinks = new List<SinkFunction>();
+            }
+            else
+            {
+                Sinks = new List<SinkFunction>(((ExecutionEnvironment)env).Sinks);
+            }
         }
 
         public ICalculateInpute CalculateInpute { get; set; }

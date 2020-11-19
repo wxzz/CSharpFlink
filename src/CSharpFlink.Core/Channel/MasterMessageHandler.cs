@@ -12,8 +12,10 @@ namespace CSharpFlink.Core.Channel
 {
     public class MasterMessageHandler : ChannelHandlerAdapter
     {
-        public MasterMessageHandler()
+        private MasterServer _ms;
+        public MasterMessageHandler(MasterServer ms)
         {
+            _ms = ms;
         }
 
         public override void ChannelRegistered(IChannelHandlerContext context)
@@ -21,7 +23,7 @@ namespace CSharpFlink.Core.Channel
             base.ChannelRegistered(context);
             string id = context.Channel.Id.AsLongText();
             MasterServer.Clients.TryAdd(id, context);
-            MasterServer.OnConnect(id);
+            _ms.OnConnect(id);
             Logger.Log.Info(true, "子节点连接:" + context.Channel.RemoteAddress.ToString() + ",子节点数:" + MasterServer.Clients.Count.ToString());
         }
 
@@ -31,7 +33,7 @@ namespace CSharpFlink.Core.Channel
             string id = context.Channel.Id.AsLongText();
             MasterServer.Clients.TryRemove(id, out removeChannel);
             base.ChannelUnregistered(context);
-            MasterServer.OnDisonnect(id);
+            _ms.OnDisonnect(id);
             Logger.Log.Info(true, "子节点断开:" + context.Channel.RemoteAddress.ToString() + ",子节点数:" + MasterServer.Clients.Count.ToString());
         }
 
@@ -46,7 +48,7 @@ namespace CSharpFlink.Core.Channel
                     byte[] array = new byte[length];
                     byteBuffer.GetBytes(byteBuffer.ReaderIndex,array);
 
-                    MasterServer.OnReceiveUpTransmisstion(array);
+                    _ms.OnReceiveUpTransmisstion(array);
                 }
                 else
                 {

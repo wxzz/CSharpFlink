@@ -13,6 +13,8 @@ namespace CSharpFlink
         {
             try
             {
+                ExecutionEnvironment env = (ExecutionEnvironment)ExecutionEnvironment.GetExecutionEnvironment(args);
+
                 bool wait = false;
                 if (args.Length > 0)
                 {
@@ -23,14 +25,16 @@ namespace CSharpFlink
                     else
                     {
                         wait = true;
-                        ExecutionEnvironment.TaskAssembly.ExcuteMain(args);
+                        env.TaskAssembly.ExcuteMain(args);
                     }
                 }
                 else
                 {
                     wait = true;
-                    ExecutionEnvironment.TaskAssembly.ExcuteMain(args);
+                    env.TaskAssembly.ExcuteMain(args);
                 }
+
+                env.ExcuteSource();
 
                 if (wait)
                 {
@@ -41,6 +45,8 @@ namespace CSharpFlink
                             || cmd == "quit"
                             || cmd == "stop")
                         {
+                            env.Stop();
+                            env = null;
                             break;
                         }
                     }

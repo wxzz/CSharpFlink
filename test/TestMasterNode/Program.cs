@@ -19,7 +19,7 @@ namespace TestMasterNode
         static int _delayWindowCount = 0;
         static ICalculate _calculate = new Avg();
 
-        static ExecutionEnvironment execution;
+        static IExecutionEnvironment execution;
         static void Main(string[] args)
         {
             args = new string[] { "-c", System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "cfg", "master.cfg") };

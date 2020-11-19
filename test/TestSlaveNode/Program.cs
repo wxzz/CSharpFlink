@@ -10,7 +10,7 @@ namespace TestSlaveNode
         static void Main(string[] args)
         {
             args = new string[] { "-c", System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "cfg", "slave.cfg") };
-            execution = ExecutionEnvironment.GetExecutionEnvironment(args);
+            execution = (ExecutionEnvironment)ExecutionEnvironment.GetExecutionEnvironment(args);
             TestSlaveClient();
             Console.ReadLine();
         }

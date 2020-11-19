@@ -4,7 +4,7 @@ using CSharpFlink.Core.Task;
 
 namespace CSharpFlink.Core.Window
 {
-    public interface IWindowTask : ITask
+    public interface IWindowTask : ICalculateTask
     {
         ///// <summary>
         ///// 聚合计算方式 

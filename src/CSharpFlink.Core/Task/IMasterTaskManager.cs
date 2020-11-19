@@ -18,6 +18,7 @@ namespace CSharpFlink.Core.Task
         void RemoveExpressionTask(string expId);
 
         bool ContainsWindow(string windowId);
+
         IWindowTask GetWindow(string windowId);
 
         void AddWorker(string id, string name, PublishCalculateCompleted calculateCallback);

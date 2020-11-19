@@ -24,14 +24,19 @@ namespace CSharpFlink.Core.Channel
 
         public static ConcurrentDictionary<string, IChannelHandlerContext> Clients = new ConcurrentDictionary<string, IChannelHandlerContext>();
 
-        internal static event ConnectHandler Connect;
+        internal event ConnectHandler Connect;
 
-        internal static event DisconnectHandler Disconnect;
+        internal event DisconnectHandler Disconnect;
 
-        internal static event ReceiveUpTransmisstionHandler ReceiveUpTransmisstion;
+        internal event ReceiveUpTransmisstionHandler ReceiveUpTransmisstion;
 
-        public MasterServer()
+        private string _localIp = "127.0.0.1";
+        private int _localPort = 7007;
+
+        public MasterServer(string ip= "127.0.0.1", int port= 7007)
         {
+            _localIp = ip;
+            _localPort = port;
             _bossGroup = new MultithreadEventLoopGroup(1);
             _workerGroup = new MultithreadEventLoopGroup();
             _bootstrap=new ServerBootstrap();
@@ -55,10 +60,10 @@ namespace CSharpFlink.Core.Channel
                     IChannelPipeline pipeline = channel.Pipeline;
                     pipeline.AddLast("DotNetty-enc", new LengthFieldPrepender(4));
                     pipeline.AddLast("DotNetty-dec", new LengthFieldBasedFrameDecoder(GlobalConfig.Config.MaxFrameLength, 0, 4, 0, 4));
-                    pipeline.AddLast(new MasterMessageHandler());
+                    pipeline.AddLast(new MasterMessageHandler(this));
                 }));
 
-                _bootstrapChannel = _bootstrap.BindAsync(GlobalConfig.Config.MasterListenPort).Result;
+                _bootstrapChannel = _bootstrap.BindAsync(_localPort).Result;
                 Logger.Log.Info(false, "主节点侦听端口:"+ GlobalConfig.Config.MasterListenPort);
             }
             catch(Exception ex)
@@ -102,7 +107,7 @@ namespace CSharpFlink.Core.Channel
             }
         }
 
-        internal static void OnConnect(string id)
+        internal void OnConnect(string id)
         {
             if (Connect != null)
             {
@@ -110,7 +115,7 @@ namespace CSharpFlink.Core.Channel
             }
         }
 
-        internal static void OnDisonnect(string id)
+        internal void OnDisonnect(string id)
         {
             if (Connect != null)
             {
@@ -118,7 +123,7 @@ namespace CSharpFlink.Core.Channel
             }
         }
 
-        internal static void OnReceiveUpTransmisstion(byte[] upMsg)
+        internal void OnReceiveUpTransmisstion(byte[] upMsg)
         {
             if(ReceiveUpTransmisstion!=null)
             {

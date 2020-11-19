@@ -13,33 +13,46 @@ using System.Threading;
 
 namespace CSharpFlink.Core.Execution
 {
-    public class ExecutionEnvironment
+    public class ExecutionEnvironment : IExecutionEnvironment
     {
+        private static IExecutionEnvironment _executionEnvironment;
+
+        public static IExecutionEnvironment GetExecutionEnvironment(string[] args = null)
+        {
+            if (_executionEnvironment == null)
+            {
+                lock (SyncLock)
+                {
+                    if (_executionEnvironment == null)
+                    {
+                        _executionEnvironment = new ExecutionEnvironment(args);
+                    }
+                }
+            }
+            return _executionEnvironment;
+        }
+
         internal List<SourceFunctionThread> SourceFunctionThreads;
 
-        internal static List<SinkFunction> Sinks { get; set; }
+        internal List<SinkFunction> Sinks { get; set; }
 
-        public static TaskAssembly TaskAssembly { get; set; }
-
-        static ExecutionEnvironment()
-        {
-            Sinks = new List<SinkFunction>();
-            TaskAssembly = new TaskAssembly();
-        }
+        public TaskAssembly TaskAssembly { get; set; }
 
         internal ExecutionEnvironment(string[] args)
         {
             SourceFunctionThreads = new List<SourceFunctionThread>();
+            Sinks = new List<SinkFunction>();
+            TaskAssembly = new TaskAssembly();
 
-            if(args!=null && args.Length>0)
+            if (args != null && args.Length > 0)
             {
-                Dictionary<string,string> dic = FormatArgs.GetArgsDictionary(args);
+                Dictionary<string, string> dic = FormatArgs.GetArgsDictionary(args);
 
                 if (dic.ContainsKey(FormatArgs.c_c))
                 {
                     string cfgPath = dic[FormatArgs.c_c];
 
-                    if(System.IO.File.Exists(cfgPath))
+                    if (System.IO.File.Exists(cfgPath))
                     {
                         GlobalConfig.ChangeConfig(cfgPath);
                     }
@@ -51,15 +64,12 @@ namespace CSharpFlink.Core.Execution
             Start();
         }
 
-        public static ExecutionEnvironment GetExecutionEnvironment(string[] args=null)
-        {
-            return new ExecutionEnvironment(args);
-        }
+        private static object SyncLock = new object();
 
         private MasterNode _masterNode;
         private SlaveNode _slaveNode;
 
-        public IMasterTaskManager TaskManager 
+        public IMasterTaskManager TaskManager
         {
             get
             {
@@ -77,19 +87,19 @@ namespace CSharpFlink.Core.Execution
 
         private void Start()
         {
-            NodeType nt=GlobalConfig.Config.NodeType;
+            NodeType nt = GlobalConfig.Config.NodeType;
             if (nt == NodeType.Master)
             {
                 _masterNode = new MasterNode();
                 _masterNode.Start();
             }
-            else if(nt == NodeType.Slave)
+            else if (nt == NodeType.Slave)
             {
                 _masterNode = new MasterNode();
                 _slaveNode = new SlaveNode();
                 _slaveNode.Start();
             }
-            else if(nt==NodeType.Both)
+            else if (nt == NodeType.Both)
             {
                 _masterNode = new MasterNode();
                 _masterNode.Start();
@@ -101,7 +111,7 @@ namespace CSharpFlink.Core.Execution
 
         public void Stop()
         {
-            if(SourceFunctionThreads.Count>0)
+            if (SourceFunctionThreads.Count > 0)
             {
                 foreach (SourceFunctionThread t in SourceFunctionThreads)
                 {
@@ -113,7 +123,7 @@ namespace CSharpFlink.Core.Execution
 
                     try
                     {
-                        t.Thread.Join(t.SourceFunction.Interval*2);
+                        t.Thread.Join(t.SourceFunction.Interval * 2);
                         t.Thread.Interrupt();
                     }
                     catch { }
@@ -153,13 +163,13 @@ namespace CSharpFlink.Core.Execution
 
         public void AddSource(SourceFunction sf)
         {
-            if(sf!=null)
+            if (sf != null)
             {
                 try
                 {
                     sf.Init();
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     Logger.Log.Error(true, "SourceFuntion:", ex);
                 }
@@ -170,7 +180,7 @@ namespace CSharpFlink.Core.Execution
                 thread.IsBackground = true;
                 thread.Name = "SourceFunction:" + sf.GetHashCode().ToString();
 
-                SourceFunctionThread sourceFunctionThread = new SourceFunctionThread(sf,thread);
+                SourceFunctionThread sourceFunctionThread = new SourceFunctionThread(sf, thread);
 
                 SourceFunctionThreads.Add(sourceFunctionThread);
             }
@@ -183,15 +193,18 @@ namespace CSharpFlink.Core.Execution
 
         public void ExcuteSource()
         {
-            foreach(SourceFunctionThread sft in SourceFunctionThreads)
+            foreach (SourceFunctionThread sft in SourceFunctionThreads)
             {
-                sft.Thread.Start(sft.SourceFunction.Context);
+                if (!sft.Thread.IsAlive)
+                {
+                    sft.Thread.Start(sft.SourceFunction.Context);
+                }
             }
         }
 
         public void SourceFunction_CollectHandler(IMetaData[] metaDatas)
         {
-            if(_masterNode!=null)
+            if (_masterNode != null)
             {
                 foreach (IMetaData md in metaDatas)
                 {

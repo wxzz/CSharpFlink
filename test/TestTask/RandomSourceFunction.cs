@@ -18,7 +18,7 @@ namespace TestTask
         private int _windowInterval = 5;
         private int _delayWindowCount = 2;
         private int _interval = 1000;
-
+        
         public static string tag_id = "tag_001";
 
         public override void Cancel()

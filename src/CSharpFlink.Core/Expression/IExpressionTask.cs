@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace CSharpFlink.Core.Expression
 {
-    public interface IExpressionTask : ITask
+    public interface IExpressionTask : ICalculateTask
     {
         ExpressionCalculateType ExpressionCalculateType { get; set; }
         List<string> PatternDataList { get; set; }

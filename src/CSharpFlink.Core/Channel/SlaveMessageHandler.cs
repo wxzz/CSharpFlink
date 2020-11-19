@@ -15,6 +15,12 @@ namespace CSharpFlink.Core.Channel
 {
     public class SlaveMessageHandler : ChannelHandlerAdapter
     {
+        private SlaveClient _sc;
+        public SlaveMessageHandler(SlaveClient sc)
+        {
+            _sc = sc;
+        }
+
         public override void ChannelUnregistered(IChannelHandlerContext context)
         {
             if(SlaveClient.Channel!=null)
@@ -41,7 +47,7 @@ namespace CSharpFlink.Core.Channel
                     byte[] array = new byte[length];
                     byteBuffer.GetBytes(byteBuffer.ReaderIndex, array);
 
-                    SlaveClient.OnReceiveTask(array);
+                    _sc.OnReceiveTask(array);
                 }
                 else
                 {

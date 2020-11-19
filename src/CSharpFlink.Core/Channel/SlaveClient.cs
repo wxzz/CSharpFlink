@@ -28,7 +28,7 @@ namespace CSharpFlink.Core.Channel
 
         private static ManualResetEvent _manualResetEvent = new ManualResetEvent(true);
 
-        internal static event ReceiveDownTransmisstionHandler ReceiveDownTransmisstion;
+        internal event ReceiveDownTransmisstionHandler ReceiveDownTransmisstion;
 
         private int _connectInterval = 2000;
 
@@ -48,8 +48,15 @@ namespace CSharpFlink.Core.Channel
         }
 
         public static IChannel Channel { get; set; }
-        public SlaveClient()
+
+        private string _remoteIp = "127.0.0.1";
+        private int _remotePort = 7007;
+
+        public SlaveClient(string remoteIp= "127.0.0.1", int remotePort=7007)
         {
+            _remoteIp = remoteIp;
+            _remotePort = remotePort;
+
             _bossGroup = new MultithreadEventLoopGroup();
             _bootstrap = new Bootstrap();
 
@@ -71,10 +78,7 @@ namespace CSharpFlink.Core.Channel
                 {
                     _manualResetEvent.WaitOne();
                    
-                    string masterIp = GlobalConfig.Config.MasterIp;
-                    int masterPort = GlobalConfig.Config.MasterListenPort;
-
-                    _bootstrap.RemoteAddress(IPAddress.Parse(masterIp),masterPort);
+                    _bootstrap.RemoteAddress(IPAddress.Parse(_remoteIp),_remotePort);
                     IChannel channel = _bootstrap.ConnectAsync().Result;
 
                     Channel = channel;
@@ -111,7 +115,7 @@ namespace CSharpFlink.Core.Channel
                     IChannelPipeline pipeline = channel.Pipeline;
                     pipeline.AddLast("DotNetty-enc", new LengthFieldPrepender(4));
                     pipeline.AddLast("DotNetty-dec", new LengthFieldBasedFrameDecoder(GlobalConfig.Config.MaxFrameLength, 0, 4, 0, 4));
-                    pipeline.AddLast(new SlaveMessageHandler());
+                    pipeline.AddLast(new SlaveMessageHandler(this));
                    
                 }));
                 _connectThread.Start();
@@ -186,7 +190,7 @@ namespace CSharpFlink.Core.Channel
             }
         }
 
-        internal static void OnReceiveTask(byte[] taskMsg)
+        internal void OnReceiveTask(byte[] taskMsg)
         {
             if(ReceiveDownTransmisstion!=null)
             {
