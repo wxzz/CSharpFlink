@@ -93,9 +93,19 @@ dotnet CSharpFlink.dll -c c:/master.cfg -t c:/mytask.dll
 * 数据计算过程，可以自定义数据处理或加工，需要继承Calculate.Calculate接口，参见：聚合计算Avg.cs、表达式计算ExpressionCalculate.cs。通过AddWindowTask或AddExpressionTask函数参数进行实例化。
 * 数据计算结果存储，可以自定义存储任何介质上，需要继承SinkFunction接口，参见：SinkFunction.cs类。
 
-### 11	应用事例展示
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;同一台电脑，CPU：4核 I5-7400 3.0GHz,内存：16G，1个主节点，5个工作节点，生成1000个数据点任务，随机数据点时间窗口和计算算子，CPU使用率为：20%-30%，内存使用率：30%-40%，主节点CPU和内存使用情况：3%-5%、100MB-300MB, 工作节点CPU和内存使用情况：0.1%-2%、25MB-60MB。运行效果，如下图：
-![CSharpFlink事例展示](https://img2020.cnblogs.com/blog/279374/202011/279374-20201117230605084-1962198174.png)
+### 11	单机10数据点计算应用事例展示
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;普通PC机10万数据点秒级计算，CPU：4核 I5-7400 2.7GHz,内存：16G，随机数据点时间窗口和计算算子，主节点CPU和内存使用情况：15%-35%、1500MB-2048MB, 工作节点CPU和内存使用情况：0.1%-2.5%、18MB-30MB。 本机部署1个主节点，10个计算节点。主节点生成10万个数据点的计算任务，每个数据点1秒钟产生一个新数据，计算时间窗口的最大值、最小值、平均值或和值。
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;部署结构，如下图：
+
+![CSharpFlink部署](https://img2020.cnblogs.com/blog/279374/202011/279374-20201119170804560-541239280.png)
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;进程显示，如下图：
+
+![CSharpFlink进程](https://img2020.cnblogs.com/blog/279374/202011/279374-20201119170608694-1147358364.png)
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;运行效果，如下图：
+
+![CSharpFlink事例展示](https://img2020.cnblogs.com/blog/279374/202011/279374-20201119171315456-2032669912.gif)
 
 iNeuOS工业互联网公众号：
 
