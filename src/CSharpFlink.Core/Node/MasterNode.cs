@@ -15,12 +15,12 @@ namespace CSharpFlink.Core.Node
         private MasterServer _masterServer { get; set; }
         public MasterNode()
         {
-            TaskManager = new MasterTaskManager();
-
-            _masterServer = new MasterServer(GlobalConfig.Config.MasterIp,GlobalConfig.Config.MasterListenPort);
+            _masterServer = new MasterServer(GlobalConfig.Config.MasterIp, GlobalConfig.Config.MasterListenPort);
             _masterServer.Connect += ConnectHandler;
             _masterServer.Disconnect += DisconnectHandler;
-            _masterServer.ReceiveUpTransmisstion += ReceiveUpTransmisstion;
+            _masterServer.ReceiveTransmisstionHandler += ReceiveTransmisstion;
+
+            TaskManager = new MasterTaskManager((IChannelMessageHandler)_masterServer);
         }
 
         public void Start()
@@ -32,7 +32,7 @@ namespace CSharpFlink.Core.Node
         {
             _masterServer.Connect -= ConnectHandler;
             _masterServer.Disconnect -= DisconnectHandler;
-            _masterServer.ReceiveUpTransmisstion -= ReceiveUpTransmisstion;
+            _masterServer.ReceiveTransmisstionHandler -= ReceiveTransmisstion;
 
             _masterServer.Stop();
 
@@ -49,7 +49,7 @@ namespace CSharpFlink.Core.Node
             TaskManager.AddWorker(channelId, "子节点-" + channelId, null);
         }
 
-        private void ReceiveUpTransmisstion(byte[] upMsg)
+        private void ReceiveTransmisstion(byte[] upMsg)
         {
             TaskManager.RemoveCache(upMsg);
         }

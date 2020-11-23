@@ -14,10 +14,11 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace CSharpFlink.Core.Channel
 {
-    public class SlaveClient
+    public class SlaveClient : IChannelMessageHandler
     {
         private MultithreadEventLoopGroup _bossGroup;
         private Bootstrap _bootstrap=null;
@@ -26,13 +27,13 @@ namespace CSharpFlink.Core.Channel
 
         private bool _connectThreadExit = false;
 
-        private static ManualResetEvent _manualResetEvent = new ManualResetEvent(true);
+        private ManualResetEvent _manualResetEvent = new ManualResetEvent(true);
 
-        internal event ReceiveDownTransmisstionHandler ReceiveDownTransmisstion;
+        internal event ReceiveTransmisstionHandler ReceiveTransmisstionHandler;
 
         private int _connectInterval = 2000;
 
-        public static bool DoConnect
+        private bool DoConnect
         {
             set
             {
@@ -47,7 +48,7 @@ namespace CSharpFlink.Core.Channel
             }
         }
 
-        public static IChannel Channel { get; set; }
+        private IChannel Channel { get; set; }
 
         private string _remoteIp = "127.0.0.1";
         private int _remotePort = 7007;
@@ -79,13 +80,9 @@ namespace CSharpFlink.Core.Channel
                     _manualResetEvent.WaitOne();
                    
                     _bootstrap.RemoteAddress(IPAddress.Parse(_remoteIp),_remotePort);
-                    IChannel channel = _bootstrap.ConnectAsync().Result;
+                    Task<IChannel> taskConnect = _bootstrap.ConnectAsync();
 
-                    Channel = channel;
-
-                    DoConnect = false;
-
-                    Logger.Log.Info(true, "连接到主节点:" + GlobalConfig.Config.MasterIp + " " + GlobalConfig.Config.MasterListenPort.ToString());
+                    taskConnect.Wait();
                 }
                 catch(ThreadInterruptedException)
                 {
@@ -115,7 +112,7 @@ namespace CSharpFlink.Core.Channel
                     IChannelPipeline pipeline = channel.Pipeline;
                     pipeline.AddLast("DotNetty-enc", new LengthFieldPrepender(4));
                     pipeline.AddLast("DotNetty-dec", new LengthFieldBasedFrameDecoder(GlobalConfig.Config.MaxFrameLength, 0, 4, 0, 4));
-                    pipeline.AddLast(new SlaveMessageHandler(this));
+                    pipeline.AddLast(new SlaveMessageHandler((IChannelMessageHandler)this));
                    
                 }));
                 _connectThread.Start();
@@ -170,8 +167,9 @@ namespace CSharpFlink.Core.Channel
             }
         }
 
-        public static void Send(byte[] data)
+        public void Send(string channelId, byte[] data, out string remoteInfo)
         {
+            remoteInfo = String.Empty;
             if (data == null)
             {
                 Logger.Log.Info(true, "SlaveClient.Send的data参数为空");
@@ -182,7 +180,7 @@ namespace CSharpFlink.Core.Channel
             {
                 IByteBuffer buffer = Unpooled.WrappedBuffer(data);
                 Channel.WriteAndFlushAsync(buffer);
-                Logger.Log.Info(false, "向主节点发送信息:" + GlobalConfig.Config.MasterIp + " " + GlobalConfig.Config.MasterListenPort.ToString());
+                Logger.Log.Info(false, "向主节点发送信息:" + _remoteIp + " " + _remotePort);
             }
             else
             {
@@ -190,11 +188,51 @@ namespace CSharpFlink.Core.Channel
             }
         }
 
-        internal void OnReceiveTask(byte[] taskMsg)
+        public void OnReceiveTransmisstion(IChannelHandlerContext context,byte[] msg)
         {
-            if(ReceiveDownTransmisstion!=null)
+            if(ReceiveTransmisstionHandler!=null)
             {
-                ReceiveDownTransmisstion(taskMsg);
+                ReceiveTransmisstionHandler(msg);
+            }
+        }
+
+        public void OnConnect(IChannelHandlerContext context)
+        {
+            if (Channel == null)
+            {
+                Channel = context.Channel;
+
+                DoConnect = false;
+            }
+
+            Logger.Log.Info(true, "连接到主节点:" + _remoteIp + " " + _remotePort);
+        }
+
+        public void OnDisonnect(IChannelHandlerContext context)
+        {
+            if (Channel != null)
+            {
+                Channel.CloseAsync();
+                Channel = null;
+            }
+
+            DoConnect = true;
+
+            Logger.Log.Info(true, "断开到主节点:" + _remoteIp + " " + _remotePort);
+        }
+
+        public int ClientCount
+        { 
+            get
+            {
+                if(Channel!=null)
+                {
+                    return 1;
+                }
+                else
+                {
+                    return 0;
+                }
             }
         }
     }

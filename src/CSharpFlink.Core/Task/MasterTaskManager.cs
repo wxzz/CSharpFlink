@@ -47,8 +47,12 @@ namespace CSharpFlink.Core.Task
 
         private bool _remoteInvokeExit = false;
 
-        public MasterTaskManager()
+        private IChannelMessageHandler _channelMessageHandler;
+
+        public MasterTaskManager(IChannelMessageHandler channelMessageHandler)
         {
+            _channelMessageHandler = channelMessageHandler;
+
             _winList = new ConcurrentDictionary<string, IWindowTask>();
             _expList = new ConcurrentDictionary<string, IExpressionTask>();
             _workList = new ConcurrentDictionary<string, IWorker>();
@@ -84,7 +88,6 @@ namespace CSharpFlink.Core.Task
                             int parallelNum = 0;
                             if (taskNum >= workerNum)
                             {
-                                //parallelNum = taskNum - (taskNum % workerNum);
                                 parallelNum = workerNum;
                             }
                             else
@@ -142,7 +145,7 @@ namespace CSharpFlink.Core.Task
                                             {
                                                 string remoteInfo = String.Empty;
 
-                                                MasterServer.Send(worker, data, out remoteInfo);
+                                                _channelMessageHandler.Send(worker.Id, data, out remoteInfo);
 
                                                 data = null;
 
@@ -388,13 +391,14 @@ namespace CSharpFlink.Core.Task
                         else
                         {
                             isCalc = false;
+                            break;
                         }
                     }
                 }
 
                 if (isCalc)
                 {
-                    if (MasterServer.ClientCount > 0)
+                    if (_channelMessageHandler.ClientCount > 0)
                     {
                         #region
                         CalculateContext calcContext=(CalculateContext)context;

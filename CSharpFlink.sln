@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestTask", "test\TestTask\T
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestCommon", "test\TestCommon\TestCommon.csproj", "{E3F2F671-7840-43D0-820E-4AD748A46DF9}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestConfluentKafka", "test\TestConfluentKafka\TestConfluentKafka.csproj", "{47E66FE7-30AC-4A0C-8A5C-970E4C80E9BA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +51,10 @@ Global
 		{E3F2F671-7840-43D0-820E-4AD748A46DF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E3F2F671-7840-43D0-820E-4AD748A46DF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E3F2F671-7840-43D0-820E-4AD748A46DF9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47E66FE7-30AC-4A0C-8A5C-970E4C80E9BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47E66FE7-30AC-4A0C-8A5C-970E4C80E9BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47E66FE7-30AC-4A0C-8A5C-970E4C80E9BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47E66FE7-30AC-4A0C-8A5C-970E4C80E9BA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -60,6 +66,7 @@ Global
 		{12EF4E0C-A574-41FD-95F3-93B9A1336F85} = {3219DE13-98CD-467D-9426-BEC7CD6ADAA2}
 		{DAD0AA4D-6EAD-44AE-BE46-BB7B78483E24} = {D774BA5D-85FF-4DF1-8AF9-14761CD4B617}
 		{E3F2F671-7840-43D0-820E-4AD748A46DF9} = {D774BA5D-85FF-4DF1-8AF9-14761CD4B617}
+		{47E66FE7-30AC-4A0C-8A5C-970E4C80E9BA} = {D774BA5D-85FF-4DF1-8AF9-14761CD4B617}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {226C8C6A-C9B0-4048-B153-9DCA8712E948}

@@ -10,9 +10,5 @@ namespace CSharpFlink.Core.Channel
 
     public delegate void DisconnectHandler(string channelId);
 
-    //public delegate void ReceiveDownTransmisstionHandler(DownTransmission downTransmission);
-
-    public delegate void ReceiveDownTransmisstionHandler(byte[] taskMsg);
-
-    public delegate void ReceiveUpTransmisstionHandler(byte[] upTransmisstion);
+    public delegate void ReceiveTransmisstionHandler(byte[] msg);
 }

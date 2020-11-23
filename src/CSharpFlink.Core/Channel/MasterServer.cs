@@ -15,26 +15,27 @@ using System.Text;
 
 namespace CSharpFlink.Core.Channel
 {
-    public class MasterServer
+    public class MasterServer : IChannelMessageHandler
     {
         private MultithreadEventLoopGroup _bossGroup;
         private MultithreadEventLoopGroup _workerGroup;
         private ServerBootstrap _bootstrap;
         private IChannel _bootstrapChannel;
 
-        public static ConcurrentDictionary<string, IChannelHandlerContext> Clients = new ConcurrentDictionary<string, IChannelHandlerContext>();
+        public ConcurrentDictionary<string, IChannelHandlerContext> _Clients;
 
         internal event ConnectHandler Connect;
 
         internal event DisconnectHandler Disconnect;
 
-        internal event ReceiveUpTransmisstionHandler ReceiveUpTransmisstion;
+        internal event ReceiveTransmisstionHandler ReceiveTransmisstionHandler;
 
         private string _localIp = "127.0.0.1";
         private int _localPort = 7007;
 
         public MasterServer(string ip= "127.0.0.1", int port= 7007)
         {
+            _Clients = new ConcurrentDictionary<string, IChannelHandlerContext>();
             _localIp = ip;
             _localPort = port;
             _bossGroup = new MultithreadEventLoopGroup(1);
@@ -60,7 +61,7 @@ namespace CSharpFlink.Core.Channel
                     IChannelPipeline pipeline = channel.Pipeline;
                     pipeline.AddLast("DotNetty-enc", new LengthFieldPrepender(4));
                     pipeline.AddLast("DotNetty-dec", new LengthFieldBasedFrameDecoder(GlobalConfig.Config.MaxFrameLength, 0, 4, 0, 4));
-                    pipeline.AddLast(new MasterMessageHandler(this));
+                    pipeline.AddLast(new MasterMessageHandler((IChannelMessageHandler)this));
                 }));
 
                 _bootstrapChannel = _bootstrap.BindAsync(_localPort).Result;
@@ -107,31 +108,40 @@ namespace CSharpFlink.Core.Channel
             }
         }
 
-        internal void OnConnect(string id)
+        public void OnConnect(IChannelHandlerContext context)
         {
+            string id = context.Channel.Id.AsLongText();
+            _Clients.TryAdd(id, context);
+
             if (Connect != null)
             {
                 Connect(id);
             }
+
+            Logger.Log.Info(true, "子节点连接:" + context.Channel.RemoteAddress.ToString() + ",子节点数:" + _Clients.Count.ToString());
         }
 
-        internal void OnDisonnect(string id)
+        public void OnDisonnect(IChannelHandlerContext context)
         {
+            string id = context.Channel.Id.AsLongText();
+            IChannelHandlerContext removeChannel;
+            _Clients.TryRemove(id, out removeChannel);
             if (Connect != null)
             {
-                Disconnect(id);
+                Disconnect(context.Channel.Id.AsLongText());
             }
+            Logger.Log.Info(true, "子节点断开:" + context.Channel.RemoteAddress.ToString() + ",子节点数:" + _Clients.Count.ToString());
         }
 
-        internal void OnReceiveUpTransmisstion(byte[] upMsg)
+        public void OnReceiveTransmisstion(IChannelHandlerContext context,byte[] upMsg)
         {
-            if(ReceiveUpTransmisstion!=null)
+            if(ReceiveTransmisstionHandler!=null)
             {
-                ReceiveUpTransmisstion(upMsg);
+                ReceiveTransmisstionHandler(upMsg);
             }
         }
 
-        public static void Send(IWorker worker, byte[] data, out string remoteInfo)
+        public void Send(string channelId, byte[] data, out string remoteInfo)
         {
             if(data==null)
             {
@@ -140,11 +150,10 @@ namespace CSharpFlink.Core.Channel
                 return;
             }
 
-            string id = worker.Id;
-            if (Clients.ContainsKey(id))
+            if (_Clients.ContainsKey(channelId))
             {
                 IChannelHandlerContext context=null;
-                if (Clients.TryGetValue(id, out context))
+                if (_Clients.TryGetValue(channelId, out context))
                 {
                     if (context != null)
                     {
@@ -171,9 +180,9 @@ namespace CSharpFlink.Core.Channel
             }
         }
 
-        public static void CloseAll()
+        public void CloseAll()
         {
-            foreach (KeyValuePair<string, IChannelHandlerContext> kv in Clients)
+            foreach (KeyValuePair<string, IChannelHandlerContext> kv in _Clients)
             {
                 try
                 {
@@ -185,11 +194,11 @@ namespace CSharpFlink.Core.Channel
             }
         }
 
-        public static int ClientCount
+        public int ClientCount
         {
             get
             {
-                return Clients.Count;
+                return _Clients.Count;
             }
         }
     }

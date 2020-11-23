@@ -30,8 +30,12 @@ namespace CSharpFlink.Core.Task
 
         private IWorker _defaultWorker;
 
-        public SlaveTaskManager()
+        private IChannelMessageHandler _channelMessageHandler;
+
+        public SlaveTaskManager(IChannelMessageHandler channelMessageHandler)
         {
+            _channelMessageHandler = channelMessageHandler;
+
             _defaultWorker = Worker.Worker.GetDefaultWorker();
             _slaveCacheList = new ConcurrentDictionary<string, DownTransmission>();
             _slaveCache = new SlaveCache();
@@ -192,7 +196,8 @@ namespace CSharpFlink.Core.Task
 
             byte[] data = TransmissionUtil.SerializeAndCompress<UpTransmisstion>(upTransmisstion);
 
-            SlaveClient.Send(data);
+            string remoteInfo;
+            _channelMessageHandler.Send(String.Empty, data, out remoteInfo);
 
             upTransmisstion = null;
             data = null;

@@ -16,18 +16,19 @@ namespace CSharpFlink.Core.Node
         public SlaveNode()
         {
             _slaveClient = new SlaveClient(GlobalConfig.Config.MasterIp, GlobalConfig.Config.MasterListenPort);
-            TaskManager = new SlaveTaskManager();
+
+            TaskManager = new SlaveTaskManager((IChannelMessageHandler)_slaveClient);
         }
 
         public void Start()
         {
-            _slaveClient.ReceiveDownTransmisstion += SlaveClient_ReceiveTask;
+            _slaveClient.ReceiveTransmisstionHandler += SlaveClient_ReceiveTask;
             _slaveClient.Start();
         }
 
         public void Stop()
         {
-            _slaveClient.ReceiveDownTransmisstion -= SlaveClient_ReceiveTask;
+            _slaveClient.ReceiveTransmisstionHandler -= SlaveClient_ReceiveTask;
             _slaveClient.Stop();
 
             TaskManager.Dispose();

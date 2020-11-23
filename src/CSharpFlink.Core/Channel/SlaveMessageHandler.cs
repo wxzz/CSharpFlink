@@ -15,24 +15,33 @@ namespace CSharpFlink.Core.Channel
 {
     public class SlaveMessageHandler : ChannelHandlerAdapter
     {
-        private SlaveClient _sc;
-        public SlaveMessageHandler(SlaveClient sc)
+        private IChannelMessageHandler _mh;
+        public SlaveMessageHandler(IChannelMessageHandler mh)
         {
-            _sc = sc;
+            _mh = mh;
+        }
+
+        public override void ChannelRegistered(IChannelHandlerContext context)
+        {
+            base.ChannelRegistered(context);
+        }
+
+        public override void ChannelActive(IChannelHandlerContext context)
+        {
+            base.ChannelActive(context);
+
+            _mh.OnConnect(context);
+        }
+
+        public override void ChannelInactive(IChannelHandlerContext context)
+        {
+            base.ChannelInactive(context);
+
+            _mh.OnDisonnect(context);
         }
 
         public override void ChannelUnregistered(IChannelHandlerContext context)
         {
-            if(SlaveClient.Channel!=null)
-            {
-                SlaveClient.Channel.CloseAsync();
-                SlaveClient.Channel = null;
-            }    
-
-            SlaveClient.DoConnect = true;
-
-            Logger.Log.Info(true, "断开到主节点:" + GlobalConfig.Config.MasterIp + " " + GlobalConfig.Config.MasterListenPort.ToString());
-
             base.ChannelUnregistered(context);
         }
 
@@ -47,7 +56,7 @@ namespace CSharpFlink.Core.Channel
                     byte[] array = new byte[length];
                     byteBuffer.GetBytes(byteBuffer.ReaderIndex, array);
 
-                    _sc.OnReceiveTask(array);
+                    _mh.OnReceiveTransmisstion(context,array);
                 }
                 else
                 {
