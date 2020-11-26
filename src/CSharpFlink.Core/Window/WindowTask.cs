@@ -135,7 +135,7 @@ namespace CSharpFlink.Core.Window
         {
             if (ds.Length > 0)
             {
-                ICalculateContext calculateContext = new CalculateContext(Name, desc + "_" + CalculateOperator.GetType().ToString(), leftTime, rightTime, CalculateType.Aggregate, new CalculateInpute(sessinId, "", nowTime, ds), null, CalculateOperator);
+                ICalculateContext calculateContext = new CalculateContext(Name, desc + "_" + CalculateOperator.GetType().ToString(), leftTime, rightTime, CalculateType.Aggregate, new CalculateInpute(sessinId, "", rightTime, ds), null, CalculateOperator);
 
                 GlobalContext.ActionBlock.Post(calculateContext);
 
