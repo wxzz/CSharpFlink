@@ -263,7 +263,14 @@ namespace CSharpFlink.Core.Task
             if (_winList.ContainsKey(windowId))
             {
                 IWindowTask windowTask;
-                _winList.TryRemove(windowId,out windowTask);
+                if(_winList.TryRemove(windowId,out windowTask))
+                {
+                    if(windowTask!=null)
+                    {
+                        windowTask.Dispose();
+                        windowTask = null;
+                    }
+                }
             }
         }
 
@@ -326,7 +333,14 @@ namespace CSharpFlink.Core.Task
             if (_expList.ContainsKey(expId))
             {
                 IExpressionTask expTask;
-                _expList.TryRemove(expId, out expTask);
+                if(_expList.TryRemove(expId, out expTask))
+                {
+                    if(expTask!=null)
+                    {
+                        expTask.Dispose();
+                        expTask = null;
+                    }
+                }
             }
         }
 
@@ -358,10 +372,13 @@ namespace CSharpFlink.Core.Task
                 if (_workList.ContainsKey(id))
                 {
                     IWorker worker;
-                    _workList.TryRemove(id, out worker);
-                    if(worker!=null)
+                    if (_workList.TryRemove(id, out worker))
                     {
-                        worker.PublishCalculateCompleted -= null;
+                        if (worker != null)
+                        {
+                            worker.PublishCalculateCompleted -= null;
+                            worker = null;
+                        }
                     }
                 }
             }
