@@ -93,7 +93,7 @@ dotnet CSharpFlink.dll -c c:/master.cfg -t c:/mytask.dll
 * 数据计算过程，可以自定义数据处理或加工，需要继承Calculate.Calculate接口，参见：聚合计算Avg.cs、表达式计算ExpressionCalculate.cs。通过AddWindowTask或AddExpressionTask函数参数进行实例化。
 * 数据计算结果存储，可以自定义存储任何介质上，需要继承SinkFunction接口，参见：SinkFunction.cs类。
 
-### 11	单机10数据点计算应用（[事例展示](https://www.cnblogs.com/lsjwq/p/14006756.html)）
+### 11	单机10万数据点计算应用（[事例展示](https://www.cnblogs.com/lsjwq/p/14006756.html)）
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;普通PC机10万数据点秒级计算，CPU：4核 I5-7400 2.7GHz,内存：16G，随机数据点时间窗口和计算算子，主节点CPU和内存使用情况：15%-35%、1500MB-2048MB, 工作节点CPU和内存使用情况：0.1%-2.5%、18MB-30MB。 本机部署1个主节点，10个计算节点。主节点生成10万个数据点的计算任务，每个数据点1秒钟产生一个新数据，计算时间窗口的最大值、最小值、平均值或和值。
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;部署结构，如下图：
 
