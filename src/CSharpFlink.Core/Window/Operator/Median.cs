@@ -12,6 +12,11 @@ namespace CSharpFlink.Core.Window.Operator
     /// </summary>  
     public class Median : Calculate.Calculate
     {
+        public Median(string resultId) : base(resultId)
+        {
+
+        }
+
         public override ICalculateOutput Calc(ICalculateInpute input)
         {
             if (input.DataSource.Any())
@@ -20,7 +25,7 @@ namespace CSharpFlink.Core.Window.Operator
                 double result;
                 if (lstCount == 1)
                 {
-                    double.TryParse(input.DataSource.FirstOrDefault().tag_value, out result);
+                    double.TryParse(input.DataSource.FirstOrDefault().TagValue, out result);
                 }
                 else
                 {
@@ -28,21 +33,21 @@ namespace CSharpFlink.Core.Window.Operator
                     //var sourceData = input.DataSource.ToList();
                     //sourceData.Sort((IMetaData p1, IMetaData p2) =>
                     //{
-                    //    double.TryParse(p1.tag_value, out double value1);
-                    //    double.TryParse(p2.tag_value, out double value2);
+                    //    double.TryParse(p1.TagValue, out double value1);
+                    //    double.TryParse(p2.TagValue, out double value2);
                     //    return value1.CompareTo(value2);
                     //});  
                     var sourceData = input.DataSource.OrderBy(t =>
                     {
-                        double.TryParse(t.tag_value, out double value);
+                        double.TryParse(t.TagValue, out double value);
                         return value;
                     }).ToList();
                     int index = lstCount / 2;
                     int remainder = lstCount % 2;
-                    double.TryParse(sourceData[index].tag_value, out result);
+                    double.TryParse(sourceData[index].TagValue, out result);
                     if (remainder.Equals(0))
                     {
-                        double.TryParse(sourceData[index - 1].tag_value, out double prevResult);
+                        double.TryParse(sourceData[index - 1].TagValue, out double prevResult);
                         result = (prevResult + result) / 2;
                     }
                 }
@@ -52,13 +57,13 @@ namespace CSharpFlink.Core.Window.Operator
                 return new CalculateOutput(input.SessinId, DateTime.Now,
                        new MetaData[] {
                            new MetaData(){
-                              tag_time=input.InputeDateTime,
-                              tag_value=result.ToString(),
-                              tag_id=md.tag_id,
-                              tag_name=md.tag_name,
-                              code=md.code,
-                              window_id=md.window_id,
-                              ext_value=md.ext_value
+                              TagTime=input.InputeDateTime,
+                              TagValue=result.ToString(),
+                              TagId=ResultId,
+                              TagName=md.TagName,
+                              Code=md.Code,
+                              WindowId=md.WindowId,
+                              ExtValue=md.ExtValue
                            }
                       });
             }

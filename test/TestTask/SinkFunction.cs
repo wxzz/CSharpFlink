@@ -20,7 +20,7 @@ namespace TestTask
             List<string> list = new List<string>();
             foreach (IMetaData md in metaDatas)
             {
-                string val = String.Format("window_id:{0},tag_time:{1},tag_id:{2},tag_value:{3}", md.window_id, md.tag_time.ToString(), md.tag_id, md.tag_value) + Environment.NewLine;
+                string val = String.Format("WindowId:{0},TagTime:{1},TagId:{2},TagValue:{3}", md.WindowId, md.TagTime.ToString(), md.TagId, md.TagValue) + Environment.NewLine;
                 list.Add(val);
              }
             FileUtil.WriteAppend("sink.txt", list.ToArray());

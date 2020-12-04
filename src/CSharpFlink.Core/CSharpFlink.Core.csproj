@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup Label="Globals">
     <SccProjectName>SAK</SccProjectName>
@@ -11,17 +11,23 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+  <ItemGroup>
+    <Compile Remove="Channel\gRPCChannel\**" />
+    <EmbeddedResource Remove="Channel\gRPCChannel\**" />
+    <None Remove="Channel\gRPCChannel\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="RPC\RpcTaskHandler.cs" />
+  </ItemGroup>
+
+  <!--<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <OutputPath>..\..\bin</OutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <OutputPath>..\..\bin</OutputPath>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="Window\AggregateCalculateType.cs" />
-  </ItemGroup>
+  </PropertyGroup>-->
 
   <ItemGroup>
     <PackageReference Include="Confluent.Kafka" Version="1.5.2" />
@@ -29,11 +35,11 @@
     <PackageReference Include="DotNetty.Codecs" Version="0.6.0" />
     <PackageReference Include="DotNetty.Common" Version="0.6.0" />
     <PackageReference Include="DotNetty.Transport" Version="0.6.0" />
+    <PackageReference Include="Hprose.RPC" Version="3.0.18" />    
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="3.7.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.Scripting" Version="3.7.0" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="5.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="protobuf-net" Version="3.0.52" />
   </ItemGroup>
-
 </Project>

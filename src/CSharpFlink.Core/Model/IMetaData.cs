@@ -4,12 +4,12 @@ namespace CSharpFlink.Core.Model
 {
     public interface IMetaData
     {
-        string window_id { get; set; }
-        string code { get; set; }
-        string tag_name { get; set; }
-        string tag_id { get; set; }
-        string tag_value { get; set; }
-        string ext_value { get; set; }
-        DateTime tag_time { get; set; }
+        string WindowId { get; set; }
+        string Code { get; set; }
+        string TagName { get; set; }
+        string TagId { get; set; }
+        string TagValue { get; set; }
+        string ExtValue { get; set; }
+        DateTime TagTime { get; set; }
     }
 }

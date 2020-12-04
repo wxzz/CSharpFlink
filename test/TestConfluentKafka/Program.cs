@@ -22,7 +22,7 @@ namespace TestConfluentKafka
         public static int TaskCount = 12;
         static int _windowInterval = 5;
         static int _delayWindowCount = 2;
-        static ICalculate _calculate = new Avg();
+        static ICalculate _calculate =null;
         static ProducerConfig config;
         static void Main(string[] args)
         {
@@ -51,8 +51,8 @@ namespace TestConfluentKafka
                 if (!executionEnvironment.TaskManager.ContainsWindow(key))
                 {
                     _windowInterval = Calc.GetRandomWindowInterval();
-                    _calculate = Calc.GetAggRandomCalculate();
-                    executionEnvironment.TaskManager.AddWindowTask(key, $"窗口{key}", _windowInterval, _delayWindowCount, _calculate);
+                    _calculate = Calc.GetAggRandomCalculate(key+"_result");
+                    executionEnvironment.TaskManager.AddOrUpdateWindowTask(key, $"窗口{key}", _windowInterval, _delayWindowCount, _calculate);
                 }
             }
 
@@ -90,110 +90,110 @@ namespace TestConfluentKafka
                     {
                          new MetaData
                        {
-                    code=null,
-                    ext_value=null,
-                    tag_id=0.ToString("0000"),
-                    tag_value=new Random().Next(1,100).ToString(),
-                    tag_time=DateTime.Now,
-                    window_id=0.ToString("0000")
+                    Code=null,
+                    ExtValue=null,
+                    TagId=0.ToString("0000"),
+                    TagValue=new Random().Next(1,100).ToString(),
+                    TagTime=DateTime.Now,
+                    WindowId=0.ToString("0000")
                         },
                           new MetaData
                        {
-                    code=null,
-                    ext_value=null,
-                    tag_id=1.ToString("0000"),
-                    tag_value=new Random().Next(1,100).ToString(),
-                    tag_time=DateTime.Now,
-                    window_id=1.ToString("0000")
+                    Code=null,
+                    ExtValue=null,
+                    TagId=1.ToString("0000"),
+                    TagValue=new Random().Next(1,100).ToString(),
+                    TagTime=DateTime.Now,
+                    WindowId=1.ToString("0000")
                         },
                            new MetaData
                        {
-                    code=null,
-                    ext_value=null,
-                    tag_id=2.ToString("0000"),
-                    tag_value=new Random().Next(1,100).ToString(),
-                    tag_time=DateTime.Now,
-                    window_id=2.ToString("0000")
+                    Code=null,
+                    ExtValue=null,
+                    TagId=2.ToString("0000"),
+                    TagValue=new Random().Next(1,100).ToString(),
+                    TagTime=DateTime.Now,
+                    WindowId=2.ToString("0000")
                         }
                            , new MetaData
                        {
-                    code=null,
-                    ext_value=null,
-                    tag_id=3.ToString("0000"),
-                    tag_value=new Random().Next(1,100).ToString(),
-                    tag_time=DateTime.Now,
-                    window_id=3.ToString("0000")
+                    Code=null,
+                    ExtValue=null,
+                    TagId=3.ToString("0000"),
+                    TagValue=new Random().Next(1,100).ToString(),
+                    TagTime=DateTime.Now,
+                    WindowId=3.ToString("0000")
                         },
                           new MetaData
                        {
-                    code=null,
-                    ext_value=null,
-                    tag_id=4.ToString("0000"),
-                    tag_value=new Random().Next(1,100).ToString(),
-                    tag_time=DateTime.Now,
-                    window_id=4.ToString("0000")
+                    Code=null,
+                    ExtValue=null,
+                    TagId=4.ToString("0000"),
+                    TagValue=new Random().Next(1,100).ToString(),
+                    TagTime=DateTime.Now,
+                    WindowId=4.ToString("0000")
                         }
                            , new MetaData
                        {
-                    code=null,
-                    ext_value=null,
-                    tag_id=5.ToString("0000"),
-                    tag_value=new Random().Next(1,100).ToString(),
-                    tag_time=DateTime.Now,
-                    window_id=5.ToString("0000")
+                    Code=null,
+                    ExtValue=null,
+                    TagId=5.ToString("0000"),
+                    TagValue=new Random().Next(1,100).ToString(),
+                    TagTime=DateTime.Now,
+                    WindowId=5.ToString("0000")
                         } , new MetaData
                        {
-                    code=null,
-                    ext_value=null,
-                    tag_id=6.ToString("0000"),
-                    tag_value=new Random().Next(1,100).ToString(),
-                    tag_time=DateTime.Now,
-                    window_id=6.ToString("0000")
+                    Code=null,
+                    ExtValue=null,
+                    TagId=6.ToString("0000"),
+                    TagValue=new Random().Next(1,100).ToString(),
+                    TagTime=DateTime.Now,
+                    WindowId=6.ToString("0000")
                         }
                          , new MetaData
                        {
-                    code=null,
-                    ext_value=null,
-                    tag_id=7.ToString("0000"),
-                    tag_value=new Random().Next(1,100).ToString(),
-                    tag_time=DateTime.Now,
-                    window_id=7.ToString("0000")
+                    Code=null,
+                    ExtValue=null,
+                    TagId=7.ToString("0000"),
+                    TagValue=new Random().Next(1,100).ToString(),
+                    TagTime=DateTime.Now,
+                    WindowId=7.ToString("0000")
                         }
                           , new MetaData
                        {
-                    code=null,
-                    ext_value=null,
-                    tag_id=8.ToString("0000"),
-                    tag_value=new Random().Next(1,100).ToString(),
-                    tag_time=DateTime.Now,
-                    window_id=8.ToString("0000")
+                    Code=null,
+                    ExtValue=null,
+                    TagId=8.ToString("0000"),
+                    TagValue=new Random().Next(1,100).ToString(),
+                    TagTime=DateTime.Now,
+                    WindowId=8.ToString("0000")
                         }
                            , new MetaData
                        {
-                    code=null,
-                    ext_value=null,
-                    tag_id=9.ToString("0000"),
-                    tag_value=new Random().Next(1,100).ToString(),
-                    tag_time=DateTime.Now,
-                    window_id=9.ToString("0000")
+                    Code=null,
+                    ExtValue=null,
+                    TagId=9.ToString("0000"),
+                    TagValue=new Random().Next(1,100).ToString(),
+                    TagTime=DateTime.Now,
+                    WindowId=9.ToString("0000")
                         }
                              , new MetaData
                        {
-                    code=null,
-                    ext_value=null,
-                    tag_id=10.ToString("0000"),
-                    tag_value=new Random().Next(1,100).ToString(),
-                    tag_time=DateTime.Now,
-                    window_id=10.ToString("0000")
+                    Code=null,
+                    ExtValue=null,
+                    TagId=10.ToString("0000"),
+                    TagValue=new Random().Next(1,100).ToString(),
+                    TagTime=DateTime.Now,
+                    WindowId=10.ToString("0000")
                         }
                               , new MetaData
                        {
-                    code=null,
-                    ext_value=null,
-                    tag_id=11.ToString("0000"),
-                    tag_value=new Random().Next(1,100).ToString(),
-                    tag_time=DateTime.Now,
-                    window_id=11.ToString("0000")
+                    Code=null,
+                    ExtValue=null,
+                    TagId=11.ToString("0000"),
+                    TagValue=new Random().Next(1,100).ToString(),
+                    TagTime=DateTime.Now,
+                    WindowId=11.ToString("0000")
                         }
                     };
                     string json = SerializeUtil.JsonSerialize(metaDatas);

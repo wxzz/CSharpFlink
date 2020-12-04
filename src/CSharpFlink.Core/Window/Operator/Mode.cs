@@ -12,11 +12,16 @@ namespace CSharpFlink.Core.Window.Operator
     /// </summary>
     public class Mode : Calculate.Calculate
     {
+        public Mode(string resultId) : base(resultId)
+        {
+
+        }
+
         public override ICalculateOutput Calc(ICalculateInpute input)
         {
             if (input.DataSource.Any())
             {
-                var source = input.DataSource.Select(t => t.tag_value).ToList();
+                var source = input.DataSource.Select(t => t.TagValue).ToList();
                 var modeSor = from item in source                             
                               group item by item into gro                           
                               orderby gro.Count() descending                            
@@ -26,13 +31,13 @@ namespace CSharpFlink.Core.Window.Operator
                 return new CalculateOutput(input.SessinId, DateTime.Now,
                        new MetaData[] {
                            new MetaData(){
-                              tag_time=input.InputeDateTime,
-                              tag_value=result.ToString(),
-                              tag_id=md.tag_id,
-                              tag_name=md.tag_name,
-                              code=md.code,
-                              window_id=md.window_id,
-                              ext_value=md.ext_value
+                              TagTime=input.InputeDateTime,
+                              TagValue=result.ToString(),
+                              TagId=ResultId,
+                              TagName=md.TagName,
+                              Code=md.Code,
+                              WindowId=md.WindowId,
+                              ExtValue=md.ExtValue
                            }
                       });
             }

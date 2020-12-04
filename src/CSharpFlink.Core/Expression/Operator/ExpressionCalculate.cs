@@ -10,6 +10,11 @@ namespace CSharpFlink.Core.Expression.Operator
 {
     public class ExpressionCalculate : Calculate.Calculate
     {
+        public ExpressionCalculate(string resultId) : base(resultId)
+        {
+
+        }
+
         public override ICalculateOutput Calc(ICalculateInpute input)
         {
             if (input.DataSource.Any())
@@ -18,11 +23,11 @@ namespace CSharpFlink.Core.Expression.Operator
                 string[] patternDataList = ExpressionTask.GetPatternDataList(script);
                 foreach(string pattern in patternDataList)
                 {
-                    IMetaData md = input.DataSource.FirstOrDefault(t => t.tag_id == pattern);
+                    IMetaData md = input.DataSource.FirstOrDefault(t => t.TagId == pattern);
 
                     if(md!=null)
                     {
-                        script = script.Replace($"[{pattern}]", md.tag_value.ToString());
+                        script = script.Replace($"[{pattern}]", md.TagValue.ToString());
                     }
                 }
 
@@ -31,8 +36,9 @@ namespace CSharpFlink.Core.Expression.Operator
                 return new CalculateOutput(input.SessinId, DateTime.Now,
                        new MetaData[] {
                            new MetaData(){
-                             tag_time=input.InputeDateTime,
-                             tag_value=result.ToString()
+                             TagId=ResultId,
+                             TagTime=input.InputeDateTime,
+                             TagValue=result.ToString()
                            }
                       });
             }

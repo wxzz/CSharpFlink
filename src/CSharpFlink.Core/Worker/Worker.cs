@@ -56,7 +56,7 @@ namespace CSharpFlink.Core.Worker
 
             if (output != null)
             {
-                Logger.Log.Info(false, $"{context.Name}_{this.Name}_{context.Desc}-线程({Thread.CurrentThread.ManagedThreadId.ToString("0000")})：【{context.LeftTime.ToString()}-{context.RightTime.ToString()}】,【Result】:{output.DataSource[0].tag_value}");
+                Logger.Log.Info(false, $"{context.Name}_{this.Name}_{context.Desc}-线程({Thread.CurrentThread.ManagedThreadId.ToString("0000")})：【{context.LeftTime.ToString()}-{context.RightTime.ToString()}】,【Result】:{output.DataSource[0].TagValue}");
             }
             else
             {

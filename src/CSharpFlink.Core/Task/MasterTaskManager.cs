@@ -234,7 +234,7 @@ namespace CSharpFlink.Core.Task
             }
         }
 
-        public void AddWindowTask(string windowId, string windowName, int windowInterval, int delayWindowCount,ICalculate calc)
+        public void AddOrUpdateWindowTask(string windowId, string windowName, int windowInterval, int delayWindowCount,ICalculate calc)
         {
             if (!_winList.ContainsKey(windowId))
             {
@@ -294,7 +294,7 @@ namespace CSharpFlink.Core.Task
                 {
                     if (kv.Value.ExpressionCalculateType == ExpressionCalculateType.ValueChangedCalculate)
                     {
-                        if (kv.Value.PatternDataList.Contains(md.tag_id))
+                        if (kv.Value.PatternDataList.Contains(md.TagId))
                         {
                             ((ExpressionTask)kv.Value).PublishCalculate();
                         }
@@ -303,7 +303,7 @@ namespace CSharpFlink.Core.Task
             }
         }
 
-        public void AddExpressionTask(string expId, string expName, ExpressionCalculateType expCalculateType, int timerInterval, string script,ICalculate calc)
+        public void AddOrUpdateExpressionTask(string expId, string expName, ExpressionCalculateType expCalculateType, int timerInterval, string script,ICalculate calc)
         {
             if (!_expList.ContainsKey(expId))
             {
@@ -399,11 +399,11 @@ namespace CSharpFlink.Core.Task
                 {
                     foreach (IMetaData md in context.CalculateInpute.DataSource)
                     {
-                        if (_winList.ContainsKey(md.tag_id))
+                        if (_winList.ContainsKey(md.TagId))
                         {
-                            md.tag_name = _winList[md.tag_id].Current.tag_name;
-                            md.tag_time = _winList[md.tag_id].Current.tag_time;
-                            md.tag_value = _winList[md.tag_id].Current.tag_value;
+                            md.TagName = _winList[md.TagId].Current.TagName;
+                            md.TagTime = _winList[md.TagId].Current.TagTime;
+                            md.TagValue = _winList[md.TagId].Current.TagValue;
                         }
                         else
                         {

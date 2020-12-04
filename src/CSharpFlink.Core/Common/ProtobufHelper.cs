@@ -13,6 +13,7 @@ namespace CSharpFlink.Core.Common
             var stream = new MemoryStream();
             Serializer.Serialize<T>(stream, t);
             var bytes = stream.ToArray();
+            stream.Flush();
             stream.Close();
             stream.Dispose();
             return bytes;
@@ -22,6 +23,7 @@ namespace CSharpFlink.Core.Common
         {
             var stream = new MemoryStream(bytes);
             var t = Serializer.Deserialize<T>(stream);
+            stream.Flush();
             stream.Close();
             stream.Dispose();
             return t;

@@ -10,10 +10,10 @@ namespace CSharpFlink.Core.Task
     public interface IMasterTaskManager : IDisposable
     {
         void AddMetaData(string windowId, IMetaData md);
-        void AddWindowTask(string windowId, string windowName,int windowInterval, int delayWindowCount,ICalculate calc);
+        void AddOrUpdateWindowTask(string windowId, string windowName,int windowInterval, int delayWindowCount,ICalculate calc);
         void RemoveWindowTask(string windowId);
 
-        void AddExpressionTask(string expId, string expName, ExpressionCalculateType expCalculateType, int timerInterval, string script,ICalculate calc);
+        void AddOrUpdateExpressionTask(string expId, string expName, ExpressionCalculateType expCalculateType, int timerInterval, string script,ICalculate calc);
 
         void RemoveExpressionTask(string expId);
 

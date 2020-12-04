@@ -208,7 +208,7 @@ namespace CSharpFlink.Core.Execution
             {
                 foreach (IMetaData md in metaDatas)
                 {
-                    _masterNode.TaskManager.AddMetaData(md.window_id, md);
+                    _masterNode.TaskManager.AddMetaData(md.WindowId, md);
                 }
             }
             else

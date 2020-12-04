@@ -6,12 +6,12 @@ namespace CSharpFlink.Core.Model
 {
     public class MetaData : IMetaData
     {
-        public DateTime tag_time { get; set; }
-        public string tag_name { get; set; }
-        public string tag_id { get; set; }
-        public string tag_value { get; set; }
-        public string code { get; set; }
-        public string ext_value { get; set; }
-        public string window_id { get; set; }
+        public DateTime TagTime { get; set; }
+        public string TagName { get; set; }
+        public string TagId { get; set; }
+        public string TagValue { get; set; }
+        public string Code { get; set; }
+        public string ExtValue { get; set; }
+        public string WindowId { get; set; }
     }
 }

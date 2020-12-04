@@ -6,6 +6,8 @@ namespace CSharpFlink.Core.Calculate
 {
     public interface ICalculate
     {
+        string ResultId { get; set; }
+
         ICalculateOutput Calc(ICalculateInpute input);
     }
 }

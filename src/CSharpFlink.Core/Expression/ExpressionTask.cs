@@ -28,7 +28,7 @@ namespace CSharpFlink.Core.Expression
 
             if (calc == null)
             {
-                CalculateOperator = new ExpressionCalculate();
+                CalculateOperator = new ExpressionCalculate($"{Id}_result");
             }
             else
             {
@@ -65,7 +65,7 @@ namespace CSharpFlink.Core.Expression
             {
                 mds[i] = new MetaData()
                 {
-                    tag_id = PatternDataList[i]
+                    TagId = PatternDataList[i]
                 };
             }
 

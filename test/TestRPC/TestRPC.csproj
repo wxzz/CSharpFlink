@@ -25,10 +25,4 @@
     <ProjectReference Include="..\TestCommon\TestCommon.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="KafkaConf.cfg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>

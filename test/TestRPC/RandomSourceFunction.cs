@@ -1,15 +1,13 @@
 ﻿using CSharpFlink.Core.Log;
 using CSharpFlink.Core.Model;
+using CSharpFlink.Core.RPC;
 using CSharpFlink.Core.Source;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using TestCommon;
 
-namespace TestTask
+namespace TestRPC
 {
     public class RandomSourceFunction : SourceFunction
     {
@@ -20,7 +18,11 @@ namespace TestTask
         private int _interval = 1000;
         
         public static string TagId = "tag_001";
-
+        private RpcClient _rpcClient;
+        public RandomSourceFunction(RpcClient rpcClient)
+        {
+            _rpcClient = rpcClient;
+        }
         public override void Cancel()
         {
             _isRun = false;
@@ -42,10 +44,11 @@ namespace TestTask
                     for (int i = 0; i < Program.TaskCount; i++)
                     {
                         string key = i.ToString("0000");
+                        MetaData md =(MetaData) Calc.GetMetaData(key, TestCommon.DataType.RtData, _delayWindowCount, _windowInterval);
 
-                        IMetaData md = Calc.GetMetaData(key, TestCommon.DataType.RtData, _delayWindowCount, _windowInterval);
+                        _rpcClient.AddMetadata((new MetaData[] { md }).ToArray());
 
-                        sc.Collect((new IMetaData[] { md }).ToArray());
+                       // sc.Collect((new IMetaData[] { md }).ToArray());
                     }
                 }
                 catch(ThreadInterruptedException ex)

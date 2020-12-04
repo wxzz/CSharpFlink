@@ -97,6 +97,8 @@ namespace CSharpFlink.Core.Config
             SlaveExcuteCalculateInterval = 1000;
             MaxFrameLength = 524288;//512KB
             WorkerPower = 2;
+            RpcIp = "127.0.0.1";
+            RpcListenPort = 8007;
         }
 
         /// <summary>
@@ -143,5 +145,15 @@ namespace CSharpFlink.Core.Config
         /// 工作者能量系数。
         /// </summary>
         public int WorkerPower { get; set; }
+
+        /// <summary>
+        /// Rpc侦听端口
+        /// </summary>
+        public int RpcListenPort { get; set; }
+
+        /// <summary>
+        /// Rpc服务IP
+        /// </summary>
+        public string RpcIp { get; set; }
     }
 }

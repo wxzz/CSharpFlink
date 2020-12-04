@@ -54,7 +54,7 @@ namespace CSharpFlink.Core.Window
 
             if (calc == null)
             {
-                CalculateOperator = new Avg();
+                CalculateOperator = new Avg($"{Id}_avg");
             }
             else
             {
@@ -82,7 +82,7 @@ namespace CSharpFlink.Core.Window
 
             if (calc == null)
             {
-                CalculateOperator = new Avg();
+                CalculateOperator = new Avg($"{Id}_avg");
             }
             else
             {
@@ -184,34 +184,34 @@ namespace CSharpFlink.Core.Window
             //this.CheckCalculateOperator();
 
             this.Current = md;
-            if (md.tag_time >= _cache.LeftTime
-                && md.tag_time < _cache.RightTime)
+            if (md.TagTime >= _cache.LeftTime
+                && md.TagTime < _cache.RightTime)
             {
-                IMetaData oldMD = _cache.Pool.Where(t => t.tag_time.ToString() == md.tag_time.ToString()).FirstOrDefault();
+                IMetaData oldMD = _cache.Pool.Where(t => t.TagTime.ToString() == md.TagTime.ToString()).FirstOrDefault();
                 if (oldMD == null)
                 {
                     _cache.Pool.Add(md);
                 }
                 else
                 {
-                    oldMD.tag_value = md.tag_value;
+                    oldMD.TagValue = md.TagValue;
                 }
             }
             else
             {
                 foreach (DataPool dp in _delayCache)
                 {
-                    if (md.tag_time >= dp.LeftTime
-                     && md.tag_time < dp.RightTime)
+                    if (md.TagTime >= dp.LeftTime
+                     && md.TagTime < dp.RightTime)
                     {
-                        IMetaData oldMD = dp.Pool.Where(t => t.tag_time.ToString () == md.tag_time.ToString ()).FirstOrDefault();
+                        IMetaData oldMD = dp.Pool.Where(t => t.TagTime.ToString () == md.TagTime.ToString ()).FirstOrDefault();
                         if (oldMD == null)
                         {
                             dp.Pool.Add(md);
                         }
                         else
                         {
-                            oldMD.tag_value = md.tag_value;
+                            oldMD.TagValue = md.TagValue;
                         }
 
                         //重新计算

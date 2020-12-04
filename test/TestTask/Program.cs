@@ -20,7 +20,7 @@ namespace TestTask
         public static int TaskCount = 1;
         static int _windowInterval = 5;
         static int _delayWindowCount = 0;
-        static ICalculate _calculate = new Avg();
+        static ICalculate _calculate = null;
         static void Main(string[] args)
         {
             if (System.IO.File.Exists(Path))
@@ -44,9 +44,9 @@ namespace TestTask
                 if (!executionEnvironment.TaskManager.ContainsWindow(key))
                 {
                     _windowInterval = Calc.GetRandomWindowInterval();
-                    _calculate = Calc.GetAggRandomCalculate();
+                    _calculate = Calc.GetAggRandomCalculate(key + "_result");
 
-                    executionEnvironment.TaskManager.AddWindowTask(key, $"窗口{key}", _windowInterval, _delayWindowCount, _calculate);
+                    executionEnvironment.TaskManager.AddOrUpdateWindowTask(key, $"窗口{key}", _windowInterval, _delayWindowCount, _calculate);
 
                     string t = String.Format("{0},{1},{2}", key,_windowInterval,_calculate.ToString ());
 
@@ -92,7 +92,7 @@ namespace TestTask
             //    var line = Console.ReadLine();
             //    if (line == "exit")
             //    {
-            //        executionEnvironment.Stop();
+            //        ((ExecutionEnvironment)executionEnvironment).Stop();
             //        break;
             //    }
             //}

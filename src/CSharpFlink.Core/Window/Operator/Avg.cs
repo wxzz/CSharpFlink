@@ -9,24 +9,29 @@ namespace CSharpFlink.Core.Window.Operator
 {
     public class Avg : Calculate.Calculate
     {
+        public Avg(string resultId):base(resultId)
+        {
+
+        }
+
         public override ICalculateOutput Calc(ICalculateInpute input)
         {
             if (input.DataSource.Any())
             {
-                double result = input.DataSource.Average(t => double.Parse(t.tag_value));
+                double result = input.DataSource.Average(t => double.Parse(t.TagValue));
 
                 IMetaData md = input.DataSource.First();
 
                 return new CalculateOutput(input.SessinId,DateTime.Now,
                        new MetaData[] {
                            new MetaData(){
-                             tag_time=input.InputeDateTime,
-                             tag_value=result.ToString(),
-                             tag_id=md.tag_id,
-                             tag_name=md.tag_name,
-                             code=md.code,
-                             window_id=md.window_id,
-                             ext_value=md.ext_value
+                             TagTime=input.InputeDateTime,
+                             TagValue=result.ToString(),
+                             TagId=ResultId,
+                             TagName=md.TagName,
+                             Code=md.Code,
+                             WindowId=md.WindowId,
+                             ExtValue=md.ExtValue
                            }
                       });
             }

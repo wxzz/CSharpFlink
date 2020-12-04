@@ -17,7 +17,7 @@ namespace TestMasterNode
         static int _initTagNum = 1;
         static int _windowInterval = 5;
         static int _delayWindowCount = 0;
-        static ICalculate _calculate = new Avg();
+        static ICalculate _calculate = null;
 
         static IExecutionEnvironment execution;
         static void Main(string[] args)
@@ -43,9 +43,9 @@ namespace TestMasterNode
                     if (!execution.TaskManager.ContainsWindow(key))
                     {
                         _windowInterval = Calc.GetRandomWindowInterval();
-                        _calculate = Calc.GetAggRandomCalculate();
+                        _calculate = Calc.GetAggRandomCalculate(key + "_result");
 
-                        execution.TaskManager.AddWindowTask(key, $"窗口{key}", _windowInterval, _delayWindowCount,_calculate);
+                        execution.TaskManager.AddOrUpdateWindowTask(key, $"窗口{key}", _windowInterval, _delayWindowCount,_calculate);
 
                         IMetaData md = Calc.GetMetaData(key, TestCommon.DataType.RtData, _delayWindowCount, _windowInterval);
 
