@@ -46,15 +46,15 @@ namespace CSharpFlink.Core.RPC
         {
             if (_httpServer != null)
             {
-                _httpServer.Start();
-
-                _rpcService.Bind(_httpServer);
-
                 TypeManager.Register<RpcContext>("RpcContext");
                 TypeManager.Register<MetaData>("MetaData");
 
                 _rpcService.AddInstanceMethods(_rpcTaskExcute, typeof(IRpcTaskExcute).Namespace);
 
+                _httpServer.Start();
+
+                _rpcService.Bind(_httpServer);
+              
                 if (_httpServer.IsListening)
                 {
                     Logger.Log.Info(false, "Hprose.RPC服务启动成功,正在侦听端口：" + Port);

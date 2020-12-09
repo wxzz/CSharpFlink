@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace CSharpFlink.Core.RPC
 {
-    public class RpcClient:IDisposable
+    public class RpcClient:IDisposable,IRpcTaskExcute
     {
         private Client client;
         private bool _disposed = false;
@@ -25,7 +25,7 @@ namespace CSharpFlink.Core.RPC
             TypeManager.Register<RpcContext>("RpcContext");
             TypeManager.Register<MetaData>("MetaData");
 
-            client.Timeout = TimeSpan.FromSeconds(3);
+            //client.Timeout = TimeSpan.FromSeconds(30);
         }
 
         public bool Remove(RpcContext[] rpcContexts)
@@ -54,7 +54,7 @@ namespace CSharpFlink.Core.RPC
             }
         }
 
-        public bool AddMetadata(MetaData[] mds)
+        public bool AddMetaData(MetaData[] mds)
         {
             try
             {
@@ -66,7 +66,30 @@ namespace CSharpFlink.Core.RPC
                 return false;
             }
         }
-
+        public bool ContainsTaskId(string taskId, CalculateType calculateType)
+        {
+            try
+            {
+                return client.UseService<IRpcTaskExcute>(typeof(IRpcTaskExcute).Namespace).ContainsTaskId(taskId,calculateType);
+            }
+            catch (Exception ex)
+            {
+                Logger.Log.Error(true, "ContainsTaskId:", ex);
+                return false;
+            }
+        }
+        public string[] GetAllTaskId(CalculateType calculateType)
+        {
+            try
+            {
+                return client.UseService<IRpcTaskExcute>(typeof(IRpcTaskExcute).Namespace).GetAllTaskId(calculateType);
+            }
+            catch (Exception ex)
+            {
+                Logger.Log.Error(true, "ContainsTaskId:", ex);
+                return null;
+            }
+        }
         ~RpcClient()
         {
             Dispose(false);
@@ -92,6 +115,6 @@ namespace CSharpFlink.Core.RPC
                 }
             }
             _disposed = true;
-        }
+        }     
     }
 }

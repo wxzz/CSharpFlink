@@ -278,10 +278,28 @@ namespace CSharpFlink.Core.Task
         {
             return _winList[windowId];
         }
+        public string[] GetAllWindowId()
+        {
+            return _winList.Keys.ToArray();
+        }
 
         public bool ContainsWindow(string windowId)
         {
             return _winList.ContainsKey(windowId);
+        }
+
+        public bool ContainsExpression(string expId)
+        {
+            return _expList.ContainsKey(expId);
+        }
+
+        public IExpressionTask GetExpression(string expId)
+        {
+            return _expList[expId];
+        }
+        public string[] GetAllExpressionId()
+        {
+            return _expList.Keys.ToArray();
         }
 
         public void AddMetaData(string windowId, IMetaData md)
@@ -557,5 +575,6 @@ namespace CSharpFlink.Core.Task
 
             _disposed = true;
         }
+       
     }
 }

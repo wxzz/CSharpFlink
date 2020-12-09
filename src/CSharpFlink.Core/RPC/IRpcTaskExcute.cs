@@ -1,4 +1,5 @@
-﻿using CSharpFlink.Core.Model;
+﻿using CSharpFlink.Core.Calculate;
+using CSharpFlink.Core.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,7 @@ namespace CSharpFlink.Core.RPC
         bool InsertOrUpdate(RpcContext[] rpcContexts);
 
         bool AddMetaData(MetaData[] mds);
+        bool ContainsTaskId(string taskId, CalculateType calculateType);
+        string[] GetAllTaskId(CalculateType calculateType);
     }
 }

@@ -20,6 +20,12 @@ namespace CSharpFlink.Core.Task
         bool ContainsWindow(string windowId);
 
         IWindowTask GetWindow(string windowId);
+        string[] GetAllWindowId();
+
+        bool ContainsExpression(string expId);
+
+        IExpressionTask GetExpression(string expId);
+        string[] GetAllExpressionId();
 
         void AddWorker(string id, string name, PublishCalculateCompleted calculateCallback);
 

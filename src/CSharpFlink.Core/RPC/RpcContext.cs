@@ -24,7 +24,7 @@ namespace CSharpFlink.Core.RPC
         public CalculateType CalculateType { get; set; }       
        
         /// <summary>
-        /// 计算周期
+        /// 计算周期（单位为秒）
         /// </summary>
         public int WindowInterval { get; set; }
 
@@ -49,7 +49,7 @@ namespace CSharpFlink.Core.RPC
         public ExpressionCalculateType ExpressionCalculateType { get; set; }
 
         /// <summary>
-        /// 保存计算结果的ID
+        /// 保存计算结果的ID[TaskId + "_result"]
         /// </summary>
         public string ResultId { get; set; }
     }  

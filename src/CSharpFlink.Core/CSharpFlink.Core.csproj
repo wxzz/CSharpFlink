@@ -11,6 +11,15 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>..\..\bin</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <GenerateSerializationAssemblies>On</GenerateSerializationAssemblies>
+    <OutputPath>..\..\bin</OutputPath>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="Channel\gRPCChannel\**" />
     <EmbeddedResource Remove="Channel\gRPCChannel\**" />

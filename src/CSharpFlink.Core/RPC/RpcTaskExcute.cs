@@ -89,6 +89,50 @@ namespace CSharpFlink.Core.RPC
                 Logger.Log.Error(true, "执行AddMetaData出错", ex);
                 return false;
             }
-        }    
+        }
+
+        public bool ContainsTaskId(string taskId, CalculateType calculateType)
+        {
+            bool containsFlag = false;
+            try
+            {
+                if (calculateType == CalculateType.Aggregate)
+                {
+                    containsFlag= TaskManager.ContainsWindow(taskId);
+                }
+                else if (calculateType == CalculateType.Expression)
+                { 
+                    containsFlag= TaskManager.ContainsExpression(taskId);
+                }
+                return containsFlag;
+            }
+            catch (Exception ex)
+            {
+                Logger.Log.Error(true, "执行ContainsTaskId出错", ex);
+                return containsFlag;
+            }
+        }
+
+        public string[] GetAllTaskId(CalculateType calculateType)
+        {
+            string[] taskIds = null;
+            try
+            {
+                if (calculateType == CalculateType.Aggregate)
+                {
+                    taskIds= TaskManager.GetAllWindowId();
+                }
+                else if (calculateType == CalculateType.Expression)
+                {
+                    taskIds = TaskManager.GetAllExpressionId();
+                }
+                return taskIds;
+            }
+            catch (Exception ex)
+            {
+                Logger.Log.Error(true, "执行GetAllTaskId出错", ex);
+                return taskIds;
+            }
+        }
     }
 }

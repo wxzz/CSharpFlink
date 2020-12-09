@@ -46,7 +46,7 @@ namespace TestRPC
                         string key = i.ToString("0000");
                         MetaData md =(MetaData) Calc.GetMetaData(key, TestCommon.DataType.RtData, _delayWindowCount, _windowInterval);
 
-                        _rpcClient.AddMetadata((new MetaData[] { md }).ToArray());
+                        _rpcClient.AddMetaData((new MetaData[] { md }).ToArray());
 
                        // sc.Collect((new IMetaData[] { md }).ToArray());
                     }
