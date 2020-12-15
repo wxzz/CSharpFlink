@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace CSharpFlink.Core.RPC
 {
-    public class RpcClient:IDisposable,IRpcTaskExcute
+    public class RpcClient : IDisposable,IRpcTaskExcute
     {
         private Client client;
         private bool _disposed = false;
@@ -24,8 +24,6 @@ namespace CSharpFlink.Core.RPC
 
             TypeManager.Register<RpcContext>("RpcContext");
             TypeManager.Register<MetaData>("MetaData");
-
-            //client.Timeout = TimeSpan.FromSeconds(30);
         }
 
         public bool Remove(RpcContext[] rpcContexts)

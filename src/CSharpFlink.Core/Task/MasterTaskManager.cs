@@ -234,11 +234,11 @@ namespace CSharpFlink.Core.Task
             }
         }
 
-        public void AddOrUpdateWindowTask(string windowId, string windowName, int windowInterval, int delayWindowCount,ICalculate calc)
+        public void AddOrUpdateWindowTask(string windowId, string windowName, bool isOpenWindow, int windowInterval, int delayWindowCount,ICalculate calc)
         {
             if (!_winList.ContainsKey(windowId))
             {
-                IWindowTask window = new Core.Window.WindowTask(windowId, windowName, windowInterval, delayWindowCount, calc)
+                IWindowTask window = new Core.Window.WindowTask(windowId, windowName, isOpenWindow,windowInterval,delayWindowCount, calc)
                 {
                     GlobalContext = _context
                 };

@@ -21,8 +21,13 @@ namespace CSharpFlink.Core.RPC
         /// <summary>
         /// 计算类型
         /// </summary>
-        public CalculateType CalculateType { get; set; }       
-       
+        public CalculateType CalculateType { get; set; }
+
+        /// <summary>
+        /// 是否打开窗口，false:只保留当前值
+        /// </summary>
+        public bool IsOpenWindow { get; set; }
+
         /// <summary>
         /// 计算周期（单位为秒）
         /// </summary>

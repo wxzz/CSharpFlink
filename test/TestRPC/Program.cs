@@ -78,6 +78,7 @@ namespace TestRPC
                 {
                     TaskId = key,
                     CalculateType = CalculateType.Aggregate,
+                    IsOpenWindow=true,
                     //WindowInterval = Calc.GetRandomWindowInterval(),
                     WindowInterval = 5,
                     TaskName = $"窗口{i:0000}计算",

@@ -33,7 +33,7 @@ namespace CSharpFlink.Core.RPC
                     if (item.CalculateType == CalculateType.Aggregate)
                     {
                         Calculate.Calculate calEntity = WindowTaskUtil.GetAggregateCalculate(item.ResultId,item.AggregateCalculateType);
-                        TaskManager.AddOrUpdateWindowTask(item.TaskId, item.TaskName, item.WindowInterval, item.DelayWindowCount, calEntity);
+                        TaskManager.AddOrUpdateWindowTask(item.TaskId, item.TaskName,item.IsOpenWindow, item.WindowInterval, item.DelayWindowCount, calEntity);
                     }
                     else if(item.CalculateType == CalculateType.Expression)
                     {

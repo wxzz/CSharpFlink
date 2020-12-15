@@ -45,7 +45,7 @@ namespace TestMasterNode
                         _windowInterval = Calc.GetRandomWindowInterval();
                         _calculate = Calc.GetAggRandomCalculate(key + "_result");
 
-                        execution.TaskManager.AddOrUpdateWindowTask(key, $"窗口{key}", _windowInterval, _delayWindowCount,_calculate);
+                        execution.TaskManager.AddOrUpdateWindowTask(key, $"窗口{key}", true,_windowInterval, _delayWindowCount,_calculate);
 
                         IMetaData md = Calc.GetMetaData(key, TestCommon.DataType.RtData, _delayWindowCount, _windowInterval);
 

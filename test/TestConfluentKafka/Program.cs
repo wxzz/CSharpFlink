@@ -52,7 +52,7 @@ namespace TestConfluentKafka
                 {
                     _windowInterval = Calc.GetRandomWindowInterval();
                     _calculate = Calc.GetAggRandomCalculate(key+"_result");
-                    executionEnvironment.TaskManager.AddOrUpdateWindowTask(key, $"窗口{key}", _windowInterval, _delayWindowCount, _calculate);
+                    executionEnvironment.TaskManager.AddOrUpdateWindowTask(key, $"窗口{key}", true, _windowInterval, _delayWindowCount, _calculate);
                 }
             }
 

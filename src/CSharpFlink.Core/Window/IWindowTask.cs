@@ -27,6 +27,11 @@ namespace CSharpFlink.Core.Window
         int WindowInterval { get; set; }
 
         /// <summary>
+        /// 是否打开窗口，如是false,则只是缓存当前的最新的数据。否则，按窗口走。
+        /// </summary>
+        bool IsOpenWindow { get; set; }
+
+        /// <summary>
         /// 增加数据
         /// </summary>
         /// <param name="md"></param>
