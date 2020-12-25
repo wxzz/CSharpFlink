@@ -10,7 +10,7 @@ namespace CSharpFlink.Core.Calculate
 {
     public class CalculateContext : ICalculateContext
     {
-        public CalculateContext(string name,string desc, DateTime leftTime, DateTime rightTime, CalculateType calculateType,ICalculateInpute inpute, ICalculateOutput output, ICalculate calculateOperator)
+        public CalculateContext(string name,string desc, DateTime leftTime, DateTime rightTime, CalculateType calculateType,ICalculateInpute inpute, List<ICalculateOutput> outputs, List<ICalculate> calculateOperators)
         {
             Name = name;
             Desc = desc;
@@ -18,8 +18,8 @@ namespace CSharpFlink.Core.Calculate
             RightTime = rightTime;
             CalculateType = calculateType;
             CalculateInpute = inpute;
-            CalculateOutput = output;
-            CalculateOperator = calculateOperator;
+            CalculateOutputs = outputs;
+            CalculateOperators = calculateOperators;
 
             IExecutionEnvironment env = ExecutionEnvironment.GetExecutionEnvironment(null);
             if (env == null)
@@ -34,9 +34,9 @@ namespace CSharpFlink.Core.Calculate
 
         public ICalculateInpute CalculateInpute { get; set; }
 
-        public ICalculateOutput CalculateOutput { get; set; }
+        public List<ICalculateOutput> CalculateOutputs { get; set; }
 
-        public ICalculate CalculateOperator { get; set; }
+        public List<ICalculate> CalculateOperators { get; set; }
 
         public string Desc { get; set; }
 

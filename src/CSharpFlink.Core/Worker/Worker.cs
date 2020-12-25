@@ -1,5 +1,6 @@
 ﻿using CSharpFlink.Core.Calculate;
 using CSharpFlink.Core.Log;
+using CSharpFlink.Core.Model;
 using CSharpFlink.Core.Sink;
 using System;
 using System.Collections.Generic;
@@ -26,37 +27,58 @@ namespace CSharpFlink.Core.Worker
 
         public void DoWork(ICalculateContext context)
         {
-            ICalculateOutput output = context.CalculateOperator.Calc(context.CalculateInpute);
-
-            if (output != null)
+            List<ICalculateOutput> outputs = new List<ICalculateOutput>();
+            foreach(ICalculate calc in context.CalculateOperators)
             {
-                foreach (SinkFunction sf in context.Sinks)
+                ICalculateOutput output=calc.Calc(context.CalculateInpute);
+                if(output!=null)
                 {
-                    try
+                    outputs.Add(output);
+                }
+            }
+#if DEBUG
+            List<string> vals = new List<string>();
+#endif
+            if (outputs != null && outputs.Count>0)
+            {
+                foreach (ICalculateOutput output in outputs)
+                {
+                    foreach (SinkFunction sf in context.Sinks)
                     {
-                        sf.Open();
+                        try
+                        {
+                            sf.Open();
 
-                        sf.Invoke(output.DataSource, null);
+                            sf.Invoke(output.DataSource, null);
 
-                        sf.Close();
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.Log.Error(true, sf.GetType().ToString (), ex);
+                            sf.Close();
+#if DEBUG
+                            foreach (IMetaData md in output.DataSource)
+                            {
+                                vals.Add(md.TagValue);
+                            }
+#endif
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.Log.Error(true, sf.GetType().ToString(), ex);
+                        }
                     }
                 }
 
                 if (PublishCalculateCompleted != null)
                 {
-                    context.CalculateOutput = output;
+                    context.CalculateOutputs = outputs;
 
                     PublishCalculateCompleted(context);
                 }
-            }
+#if DEBUG
+                string resultVals=String.Join(",", vals);
+                Logger.Log.Info(false, $"{context.Name}_{this.Name}_{context.Desc}-线程({Thread.CurrentThread.ManagedThreadId.ToString("0000")})：【{context.LeftTime.ToString()}-{context.RightTime.ToString()}】,【Result】:{resultVals}");
+#else
+                Logger.Log.Info(false, $"{context.Name}_{this.Name}_{context.Desc}-线程({Thread.CurrentThread.ManagedThreadId.ToString("0000")})：【{context.LeftTime.ToString()}-{context.RightTime.ToString()}】,【Result】:{outputs.Count.ToString()}");
+#endif
 
-            if (output != null)
-            {
-                Logger.Log.Info(false, $"{context.Name}_{this.Name}_{context.Desc}-线程({Thread.CurrentThread.ManagedThreadId.ToString("0000")})：【{context.LeftTime.ToString()}-{context.RightTime.ToString()}】,【Result】:{output.DataSource[0].TagValue}");
             }
             else
             {

@@ -1,6 +1,7 @@
 ﻿using CSharpFlink.Core.Calculate;
 using CSharpFlink.Core.Model;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
+using Microsoft.CodeAnalysis.Scripting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,8 +31,8 @@ namespace CSharpFlink.Core.Expression.Operator
                         script = script.Replace($"[{pattern}]", md.TagValue.ToString());
                     }
                 }
-
-                object result = CSharpScript.EvaluateAsync(script).Result;
+                ScriptOptions scriptOptions = ScriptOptions.Default.WithImports("System.Math");    //支持Math包含的方法运算
+                object result = CSharpScript.EvaluateAsync(script,scriptOptions).Result;
 
                 return new CalculateOutput(input.SessinId, DateTime.Now,
                        new MetaData[] {

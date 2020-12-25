@@ -20,7 +20,7 @@ namespace TestTask
         public static int TaskCount = 1;
         static int _windowInterval = 5;
         static int _delayWindowCount = 0;
-        static ICalculate _calculate = null;
+        static List<ICalculate> _calculates = null;
         static void Main(string[] args)
         {
             if (System.IO.File.Exists(Path))
@@ -44,11 +44,12 @@ namespace TestTask
                 if (!executionEnvironment.TaskManager.ContainsWindow(key))
                 {
                     _windowInterval = Calc.GetRandomWindowInterval();
-                    _calculate = Calc.GetAggRandomCalculate(key + "_result");
+                    _windowInterval = 5;
+                    _calculates = Calc.GetAggRandomCalculateList(new string[] { key + "_result1", key + "_result2" });
 
-                    executionEnvironment.TaskManager.AddOrUpdateWindowTask(key, $"窗口{key}", true, _windowInterval, _delayWindowCount, _calculate);
+                    executionEnvironment.TaskManager.AddOrUpdateWindowTask(key, $"窗口{key}", true, _windowInterval, _delayWindowCount, _calculates);
 
-                    string t = String.Format("{0},{1},{2}", key,_windowInterval,_calculate.ToString ());
+                    string t = String.Format("{0},{1},{2}", key,_windowInterval,_calculates.Count.ToString ());
 
                     tasks.Add(t);
                 }
@@ -87,15 +88,15 @@ namespace TestTask
 
             executionEnvironment.ExcuteSource();
 
-            //while (true)
-            //{
-            //    var line = Console.ReadLine();
-            //    if (line == "exit")
-            //    {
-            //        ((ExecutionEnvironment)executionEnvironment).Stop();
-            //        break;
-            //    }
-            //}
+            while (true)
+            {
+                var line = Console.ReadLine();
+                if (line == "exit")
+                {
+                    ((ExecutionEnvironment)executionEnvironment).Stop();
+                    break;
+                }
+            }
         }
     }
 }

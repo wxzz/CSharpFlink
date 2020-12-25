@@ -23,6 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\CSharpFlink.Core\CSharpFlink.Core.csproj" />
     <ProjectReference Include="..\TestCommon\TestCommon.csproj" />
+    <ProjectReference Include="..\TestTask\TestTask.csproj" />
   </ItemGroup>
 
 </Project>

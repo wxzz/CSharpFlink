@@ -82,9 +82,9 @@ namespace TestRPC
                     //WindowInterval = Calc.GetRandomWindowInterval(),
                     WindowInterval = 5,
                     TaskName = $"窗口{i:0000}计算",
-                    AggregateCalculateType = (AggregateCalculateType)new Random().Next(0, 7),
+                    AggregateCalculateTypeList =new AggregateCalculateType[] { (AggregateCalculateType)new Random().Next(0, 7) },
                     DelayWindowCount = 2,
-                    ResultId= $"{key}_result"
+                    ResultIdList=new string[] { $"{key}_result" }
                 };
                 rpcContexts.Add(rpcContext);
             }                 

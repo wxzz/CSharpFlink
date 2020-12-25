@@ -22,7 +22,7 @@ namespace CSharpFlink.Core.Window.Operator
 
                 IMetaData md = input.DataSource.First();
 
-                return new CalculateOutput(input.SessinId,DateTime.Now,
+                return new CalculateOutput(input.SessinId, DateTime.Now,
                        new MetaData[] {
                            new MetaData(){
                              TagTime=input.InputeDateTime,

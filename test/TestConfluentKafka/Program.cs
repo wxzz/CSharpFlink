@@ -8,6 +8,7 @@ using CSharpFlink.Core.Model;
 using CSharpFlink.Core.Source.Kafka;
 using CSharpFlink.Core.Window.Operator;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using TestCommon;
@@ -52,7 +53,7 @@ namespace TestConfluentKafka
                 {
                     _windowInterval = Calc.GetRandomWindowInterval();
                     _calculate = Calc.GetAggRandomCalculate(key+"_result");
-                    executionEnvironment.TaskManager.AddOrUpdateWindowTask(key, $"窗口{key}", true, _windowInterval, _delayWindowCount, _calculate);
+                    executionEnvironment.TaskManager.AddOrUpdateWindowTask(key, $"窗口{key}", true, _windowInterval, _delayWindowCount, new List<ICalculate>() { _calculate });
                 }
             }
 

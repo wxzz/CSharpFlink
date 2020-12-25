@@ -18,11 +18,11 @@ namespace CSharpFlink.Core.Calculate
 
         public CalculateType CalculateType { get; set; }
 
-        ICalculate CalculateOperator { get; set; }
+        List<ICalculate> CalculateOperators { get; set; }
 
         ICalculateInpute CalculateInpute { get; set; }
 
-        ICalculateOutput CalculateOutput { get; set; }
+        List<ICalculateOutput> CalculateOutputs { get; set; }
 
         List<SinkFunction> Sinks { get; set; }
     }

@@ -63,7 +63,7 @@ namespace CSharpFlink.Core.Window
             }
         }
 
-        public ICalculate CalculateOperator { get; set; }
+        public List<ICalculate> CalculateOperators { get; set; }
 
         /// <summary>
         /// 延迟多少窗口，防止后来数据，需要重新计算
@@ -72,30 +72,30 @@ namespace CSharpFlink.Core.Window
 
         public IGlobalContext GlobalContext { get; internal set; }
 
-        public WindowTask(string tagWindowId, string tagWindowName, ICalculate calc)
+        public WindowTask(string tagWindowId, string tagWindowName, List<ICalculate> calcs)
         {
-            InitWindow(tagWindowId, tagWindowName, true,5, 0, calc);
+            InitWindow(tagWindowId, tagWindowName, true,5, 0, calcs);
         }
 
-        public WindowTask(string tagWindowId, string tagWindowName,bool isOpenWindow, int windowInterval,int delayWindowCount, ICalculate calc) 
+        public WindowTask(string tagWindowId, string tagWindowName,bool isOpenWindow, int windowInterval,int delayWindowCount, List<ICalculate> calcs) 
         {
-            InitWindow(tagWindowId, tagWindowName, isOpenWindow, windowInterval, delayWindowCount, calc);
+            InitWindow(tagWindowId, tagWindowName, isOpenWindow, windowInterval, delayWindowCount, calcs);
         }
 
-        private void InitWindow(string tagWindowId, string tagWindowName, bool isOpenWindow, int windowInterval, int delayWindowCount, ICalculate calc)
+        private void InitWindow(string tagWindowId, string tagWindowName, bool isOpenWindow, int windowInterval, int delayWindowCount, List<ICalculate> calcs)
         {
             Id = tagWindowId;
             Name = tagWindowName;
             WindowInterval = windowInterval;
             DelayWindowCount = delayWindowCount;
 
-            if (calc == null)
+            if (calcs == null || calcs.Count<=0)
             {
-                CalculateOperator = new Avg($"{Id}_avg");
+                CalculateOperators = new List<ICalculate>() { new Avg($"{Id}_avg") };
             }
             else
             {
-                CalculateOperator = calc;
+                CalculateOperators = calcs;
             }
 
             _cache = new DataPool();
@@ -145,7 +145,7 @@ namespace CSharpFlink.Core.Window
         {
             if (ds.Length > 0)
             {
-                ICalculateContext calculateContext = new CalculateContext(Name, desc + "_" + CalculateOperator.GetType().ToString(), leftTime, rightTime, CalculateType.Aggregate, new CalculateInpute(sessinId, "", rightTime, ds), null, CalculateOperator);
+                ICalculateContext calculateContext = new CalculateContext(Name, desc + "_" + CalculateOperators.Count.ToString(), leftTime, rightTime, CalculateType.Aggregate, new CalculateInpute(sessinId, "", rightTime, ds), null, CalculateOperators);
 
                 GlobalContext.ActionBlock.Post(calculateContext);
 
@@ -166,7 +166,7 @@ namespace CSharpFlink.Core.Window
             _cache.LeftTime = DateTimeUtil.TimeStampToDateTime(curLong - offsetTime);
             _cache.RightTime = _cache.LeftTime.AddSeconds(WindowInterval);
 
-            Console.WriteLine($"{Name}-SlidTimeWindow:{CalculateOperator.GetType().ToString ()}_{WindowInterval.ToString()}:{_cache.LeftTime.ToString()}-{_cache.RightTime.ToString()}");
+            Console.WriteLine($"{Name}-SlidTimeWindow:{CalculateOperators.Count.ToString ()}_{WindowInterval.ToString()}:{_cache.LeftTime.ToString()}-{_cache.RightTime.ToString()}");
         }
 
         private void CheckDelayCache()

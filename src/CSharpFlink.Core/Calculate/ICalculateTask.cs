@@ -18,7 +18,7 @@ namespace CSharpFlink.Core.Calculate
         /// </summary>
         string Name { get; set; }
 
-        ICalculate CalculateOperator { get; set; }
+        List<ICalculate> CalculateOperators { get; set; }
 
         IGlobalContext GlobalContext { get; }
     }

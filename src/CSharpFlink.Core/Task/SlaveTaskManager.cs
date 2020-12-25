@@ -94,8 +94,8 @@ namespace CSharpFlink.Core.Task
                                 if (t.CalculateContext.CalculateInpute != null)
                                     t.CalculateContext.CalculateInpute.DataSource = null;
 
-                                if (t.CalculateContext.CalculateOutput != null)
-                                    t.CalculateContext.CalculateOutput.DataSource = null;
+                                if (t.CalculateContext.CalculateOutputs != null)
+                                    t.CalculateContext.CalculateOutputs = null;
 
                                 t.CalculateContext = null;
                                 t = null;

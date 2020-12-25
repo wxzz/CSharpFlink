@@ -234,11 +234,11 @@ namespace CSharpFlink.Core.Task
             }
         }
 
-        public void AddOrUpdateWindowTask(string windowId, string windowName, bool isOpenWindow, int windowInterval, int delayWindowCount,ICalculate calc)
+        public void AddOrUpdateWindowTask(string windowId, string windowName, bool isOpenWindow, int windowInterval, int delayWindowCount, List<ICalculate> calcs)
         {
             if (!_winList.ContainsKey(windowId))
             {
-                IWindowTask window = new Core.Window.WindowTask(windowId, windowName, isOpenWindow,windowInterval,delayWindowCount, calc)
+                IWindowTask window = new Core.Window.WindowTask(windowId, windowName, isOpenWindow,windowInterval,delayWindowCount, calcs)
                 {
                     GlobalContext = _context
                 };
@@ -252,8 +252,8 @@ namespace CSharpFlink.Core.Task
                     window.Name = windowName;
                     window.WindowInterval = windowInterval;
                     window.DelayWindowCount = delayWindowCount;
-                    window.CalculateOperator = calc;
-                    //window.AggregateCalculateType = ct;
+                    window.CalculateOperators = calcs;
+                    window.IsOpenWindow = isOpenWindow;
                 }
             }
         }
@@ -321,11 +321,11 @@ namespace CSharpFlink.Core.Task
             }
         }
 
-        public void AddOrUpdateExpressionTask(string expId, string expName, ExpressionCalculateType expCalculateType, int timerInterval, string script,ICalculate calc)
+        public void AddOrUpdateExpressionTask(string expId, string expName, ExpressionCalculateType expCalculateType, int timerInterval, string script,List<ICalculate> calcs)
         {
             if (!_expList.ContainsKey(expId))
             {
-                IExpressionTask expTask = new ExpressionTask(expId, expName, expCalculateType, timerInterval,script,calc)
+                IExpressionTask expTask = new ExpressionTask(expId, expName, expCalculateType, timerInterval,script,calcs)
                 {
                     GlobalContext = _context
                 };
@@ -341,7 +341,7 @@ namespace CSharpFlink.Core.Task
                     expTask.Script = script;
                     expTask.ExpressionCalculateType = expCalculateType;
                     expTask.TimerInterval = timerInterval;
-                    expTask.CalculateOperator = calc;
+                    expTask.CalculateOperators = calcs;
                 }
             }
         }

@@ -32,13 +32,22 @@ namespace CSharpFlink.Core.RPC
                 {
                     if (item.CalculateType == CalculateType.Aggregate)
                     {
-                        Calculate.Calculate calEntity = WindowTaskUtil.GetAggregateCalculate(item.ResultId,item.AggregateCalculateType);
-                        TaskManager.AddOrUpdateWindowTask(item.TaskId, item.TaskName,item.IsOpenWindow, item.WindowInterval, item.DelayWindowCount, calEntity);
+                        List<ICalculate> calcs = new List<ICalculate>();
+                        for (int i = 0; i < item.AggregateCalculateTypeList.Length; i++)
+                        {
+                            string resultId = item.ResultIdList[i];
+                            AggregateCalculateType aggType = item.AggregateCalculateTypeList[i];
+                            Calculate.Calculate calEntity = WindowTaskUtil.GetAggregateCalculate(resultId, aggType);
+
+                            calcs.Add(calEntity);
+                        }
+
+                        TaskManager.AddOrUpdateWindowTask(item.TaskId, item.TaskName,item.IsOpenWindow, item.WindowInterval, item.DelayWindowCount, calcs);
                     }
                     else if(item.CalculateType == CalculateType.Expression)
                     {
-                        Calculate.Calculate calEntity = new ExpressionCalculate(item.ResultId);
-                        TaskManager.AddOrUpdateExpressionTask(item.TaskId, item.TaskName, item.ExpressionCalculateType, item.WindowInterval, item.ExpressionScript, calEntity);
+                        Calculate.Calculate calEntity = new ExpressionCalculate(item.ResultIdList[0]);
+                        TaskManager.AddOrUpdateExpressionTask(item.TaskId, item.TaskName, item.ExpressionCalculateType, item.WindowInterval, item.ExpressionScript, new List<ICalculate>() { calEntity });
                     }
                 }
                 return true;

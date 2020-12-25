@@ -4,6 +4,7 @@ using CSharpFlink.Core.Model;
 using CSharpFlink.Core.Window;
 using CSharpFlink.Core.Window.Operator;
 using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 namespace TestCommon
@@ -42,6 +43,16 @@ namespace TestCommon
         {
             int num = _random.Next(0, 7);
             return WindowTaskUtil.GetAggregateCalculate(resultId,(AggregateCalculateType)num);
+        }
+
+        public static List<ICalculate> GetAggRandomCalculateList(string[] resultIdList)
+        {
+            List<ICalculate> list = new List<ICalculate>();
+            foreach(string s in resultIdList)
+            {
+                list.Add(GetAggRandomCalculate(s));
+            }
+            return list;
         }
 
         public static ICalculate GetExpCalculate(string resultId)

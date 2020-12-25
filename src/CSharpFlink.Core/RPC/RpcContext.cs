@@ -41,7 +41,7 @@ namespace CSharpFlink.Core.RPC
         /// <summary>
         /// 聚合计算类型
         /// </summary>
-        public AggregateCalculateType AggregateCalculateType { get; set; }
+        public AggregateCalculateType[] AggregateCalculateTypeList { get; set; }
 
         /// <summary>
         /// 表达式脚本
@@ -54,8 +54,8 @@ namespace CSharpFlink.Core.RPC
         public ExpressionCalculateType ExpressionCalculateType { get; set; }
 
         /// <summary>
-        /// 保存计算结果的ID[TaskId + "_result"]
+        /// 业务需要对应的tagName
         /// </summary>
-        public string ResultId { get; set; }
+        public string[] ResultIdList { get; set; }
     }  
 }

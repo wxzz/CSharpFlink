@@ -7,6 +7,7 @@ using CSharpFlink.Core.Protocol;
 using CSharpFlink.Core.Window;
 using CSharpFlink.Core.Window.Operator;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using TestCommon;
 
@@ -45,9 +46,11 @@ namespace TestMasterNode
                         _windowInterval = Calc.GetRandomWindowInterval();
                         _calculate = Calc.GetAggRandomCalculate(key + "_result");
 
-                        execution.TaskManager.AddOrUpdateWindowTask(key, $"窗口{key}", true,_windowInterval, _delayWindowCount,_calculate);
+                        execution.TaskManager.AddOrUpdateWindowTask(key, $"窗口{key}", true, _windowInterval, _delayWindowCount, new List<ICalculate>() { new Avg($"{key}_avg"),new Max($"{key}_max") });
 
                         IMetaData md = Calc.GetMetaData(key, TestCommon.DataType.RtData, _delayWindowCount, _windowInterval);
+
+                        //execution.AddSink(new TestTask.SinkFunction());
 
                         execution.TaskManager.AddMetaData(key, md);
                     }
